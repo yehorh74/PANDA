@@ -1,0 +1,32 @@
+site_name: PANDA Documentation
+site_description: PANDA (Python Automating Numerical Dot Algorithm) – an open algorithm dedicated to the precise generation and controlled parameterization of multi-element dot arrays
+site_url: https://yehorh74.github.io/PANDA
+repo_url: https://github.com/yehorh74/PANDA
+repo_name: yehorh74/PANDA
+
+theme:
+  name: material
+  language: en
+  palette:
+    scheme: default
+    primary: indigo
+    accent: indigo
+  features:
+    - navigation.expand
+    - content.code.copy
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [.]
+          options:
+            docstring_style: google  
+            show_root_heading: true
+            show_source: true
+
+nav:
+  - Home: index.md
+  - Quick Start: quickstart.md
+  - API Documentation: api.md
