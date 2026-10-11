@@ -6,6 +6,8 @@ repo_name: yehorh74/PANDA
 
 theme:
   name: material
+  logo: assets/PANDA_icon.png
+  favicon: assets/PANDA_icon.png
   language: en
   palette:
     scheme: default
