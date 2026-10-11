@@ -1,5 +1,9 @@
 # PANDA (Python Automating Numerical Dot Algorithm)
 
+<p align="center">
+  <img src="assets/PANDA_icon.png" width="120" alt="PANDA Icon">
+</p>
+
 **PANDA** is a Python library, dedicated to the precise generation and controlled parameterization of multi-element dot arrays for cognitive and psychophysiological tasks and studies.
 
 ## Main features
