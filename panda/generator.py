@@ -37,14 +37,16 @@ class PANDA:
 
     def __init__(
         self,
-        window: visual.Window,
+        window: Optional[visual.Window] = None,
         n_anchor: int = 3,
         base_ta: float = 30000.0,
         base_cha: float = 120000.0,
         color: str = "black",
         seed: Optional[int] = None,
+        default_size: Tuple[int, int] = (700, 700),
     ):
         self.win = window
+        self.default_size = default_size
         self.color = color
         self.results: List[Dict[str, Any]] = []
 
@@ -205,7 +207,8 @@ class PANDA:
             radii = self._get_radii_tp(num_elements, size_val, sd_ratio)
 
         max_r = np.max(radii)
-        half_win = min(self.win.size) / 2.0
+        win_size = self.win.size if self.win is not None else self.default_size
+        half_win = min(win_size) / 2.0
         safe_margin = half_win - max_r - 10.0
 
         if spatial_type == 'CH':
@@ -340,6 +343,8 @@ class PANDA:
         Returns:
             List[visual.Circle]: the list of generated dot objects
         """
+        if self.win is None:
+            raise RuntimeError("PsychoPy window is required to execute generate_and_save()!")
         dots, radii, positions = self.generate_balanced_set(
             num_elements=num_elements,
             spatial_type=spatial_type,
