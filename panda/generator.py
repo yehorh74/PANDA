@@ -51,8 +51,6 @@ class PANDA:
         self.results: List[Dict[str, Any]] = []
 
         self.rng = np.random.default_rng(seed)
-        if seed is not None:
-            random.seed(seed)
 
         self.n_anchor = n_anchor
         self.base_ta = base_ta
@@ -78,7 +76,7 @@ class PANDA:
             areas = np.full(num, mean_area)
         else:
             sd_area = mean_area * sd_ratio
-            areas = np.random.normal(loc=mean_area, scale=sd_area, size=num)
+            areas = self.rng.normal(loc=mean_area, scale=sd_area, size=num)
             areas = np.clip(areas, mean_area * 0.1, None)
         areas *= target_tsa / np.sum(areas)
         return np.sqrt(areas / np.pi)
@@ -99,9 +97,7 @@ class PANDA:
             perims = np.full(num, mean_perim)
         else:
             sd_perim = mean_perim * sd_ratio
-            perims = np.random.normal(
-                loc=mean_perim, scale=sd_perim, size=num
-            )
+            perims = self.rng.normal(loc=mean_perim, scale=sd_perim, size=num)
             perims = np.clip(perims, mean_perim * 0.1, None)
         perims *= target_tp / np.sum(perims)
         return perims / (2 * np.pi)
@@ -225,8 +221,8 @@ class PANDA:
             for i in range(num_elements):
                 found = False
                 for _ in range(2000):
-                    angle = random.uniform(0, 2 * np.pi)
-                    dist = target_spawn_radius * np.sqrt(random.random())
+                    angle = self.rng.uniform(0, 2 * np.pi)
+                    dist = target_spawn_radius * np.sqrt(self.rng.random())
                     new_pos = np.array(
                         [np.cos(angle) * dist, np.sin(angle) * dist]
                     )
@@ -264,17 +260,20 @@ class PANDA:
                     np.fill_diagonal(dists_matrix, np.inf)
 
                     if not np.any(dists_matrix < radii_sum):
-                        dots = [
-                            visual.Circle(
-                                self.win,
-                                radius=radii[i],
-                                pos=final_positions[i],
-                                fillColor=self.color,
-                                lineColor=self.color,
-                                edges=128,
-                            )
-                            for i in range(num_elements)
-                        ]
+                        if self.win is not None:
+                            dots = [
+                                visual.Circle(
+                                    self.win,
+                                    radius=radii[i],
+                                    pos=final_positions[i],
+                                    fillColor=self.color,
+                                    lineColor=self.color,
+                                    edges=128,
+                                )
+                                for i in range(num_elements)
+                            ]
+                        else:
+                            dots = []
                         return dots, radii.tolist(), final_positions.tolist()
 
         raise RuntimeError(
