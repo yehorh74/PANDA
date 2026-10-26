@@ -1,10 +1,12 @@
 import flet as ft
 import flet.canvas as cv
+import tkinter as tk
+from tkinter import filedialog
 
 from panda.generator import PANDA  
 
 from core.validators import parse_and_validate_inputs
-from core.exporters import save_current_stimulus_png
+from core.exporters import save_current_stimulus_png, save_all, reset_all
 
 class GeneratorScreen(ft.View):
     def __init__(self, app):
@@ -199,6 +201,34 @@ class GeneratorScreen(ft.View):
             padding=10
         )
 
+        save_btn = ft.Button(
+            content=ft.Text("Save all dots and data"),
+            width=300,  
+            disabled=True,
+            style=ft.ButtonStyle(
+                shape=ft.RoundedRectangleBorder(
+                    radius=4
+                )  
+            )
+        )
+
+        reset_btn = ft.Button(
+            content=ft.Text("Reset generator"),
+            width=300,  
+            disabled=True,
+            style=ft.ButtonStyle(
+                shape=ft.RoundedRectangleBorder(
+                    radius=4
+                )  
+            )
+        )
+
+        self.save_btn = save_btn
+        self.reset_btn = reset_btn
+
+        save_btn.on_click = lambda e: self.handle_save_click(e)
+        reset_btn.on_click = lambda e: reset_all(self, e)
+
         self.controls = [
             my_appbar,
             ft.Row([
@@ -226,6 +256,8 @@ class GeneratorScreen(ft.View):
                         self.seed,
                         ft.Divider(),
                         generate_btn,
+                        self.save_btn,
+                        self.reset_btn,
                         ft.Divider(),
                         self.info_text
                     ], scroll=ft.ScrollMode.AUTO,
@@ -235,6 +267,18 @@ class GeneratorScreen(ft.View):
                 ),
             ], expand=True)
         ]
+
+    def handle_save_click(self, e):
+        root = tk.Tk()
+        root.withdraw()
+        root.attributes('-topmost', True)
+
+        folder_path = filedialog.askdirectory(title="Select destination folder for export")
+
+        root.destroy()  
+
+        if folder_path:
+            save_all(self, folder_path)
 
     def handle_color_change(self, e):
         selected_color = self.color_dropdown.value
@@ -328,6 +372,8 @@ class GeneratorScreen(ft.View):
             self.next_btn.disabled = True
             self.delete_btn.disabled = True
             self.save_png_btn.disabled = True
+            self.save_btn.disabled = True  
+            self.reset_btn.disabled = True
         else:
             item = self.generated_datasets[self.current_index]
             self.index_label.value = f"{self.current_index + 1} of {total} (N={item['num']})"
@@ -336,6 +382,8 @@ class GeneratorScreen(ft.View):
             self.next_btn.disabled = (self.current_index == total - 1)
             self.delete_btn.disabled = False
             self.save_png_btn.disabled = False
+            self.save_btn.disabled = False
+            self.reset_btn.disabled = False
 
             canvas_width = 700
             canvas_height = 700
@@ -386,14 +434,14 @@ class GeneratorScreen(ft.View):
             self.update()
 
     def save_png(self, e):
-        try:
-            filename = save_current_stimulus_png(self)
-            if filename:
-                self.info_text.value = f"Saved {filename}"
-                self.update()
-        except Exception as ex:
-            self.info_text.value = str(ex)
-            self.update()
+        root = tk.Tk()
+        root.withdraw()
+        root.attributes('-topmost', True)
+        folder_path = filedialog.askdirectory(title="Select folder to save current stimulus")
+        root.destroy()
+        
+        if folder_path:
+            save_current_stimulus_png(self, folder_path)
 
     async def open_info(self, e):
         await self.app.url_launcher.launch_url("https://yehorh74.github.io/PANDA/") if hasattr(self.app, 'url_launcher') else None
@@ -417,14 +465,14 @@ class GeneratorScreen(ft.View):
         if selected_type == "range":
             self.field_min = ft.TextField(
                 label="Min (3-50)",
-                value="3",
+                value="5",
                 width=300,
                 keyboard_type=ft.KeyboardType.NUMBER,
                 input_filter=digit_filter,
             )
             self.field_max = ft.TextField(
                 label="Max (3-50)",
-                value="35",
+                value="15",
                 width=300,
                 keyboard_type=ft.KeyboardType.NUMBER,
                 input_filter=digit_filter,
@@ -437,7 +485,7 @@ class GeneratorScreen(ft.View):
         elif selected_type == "fixed":
             self.field_n = ft.TextField(
                 label="N (3-50)",
-                value="3",
+                value="5",
                 width=300,
                 keyboard_type=ft.KeyboardType.NUMBER,
                 input_filter=digit_filter,

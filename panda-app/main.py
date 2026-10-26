@@ -9,7 +9,7 @@ class App:
         self.page.window.height = 900
         self.page.window.resizable = False
 
-        self.version = "0.0.1"
+        self.version = "0.0.2"
 
         self.generator_screen = GeneratorScreen(self)
 
