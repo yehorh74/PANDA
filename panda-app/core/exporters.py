@@ -1,7 +1,154 @@
 import os
+import json
 import flet as ft
 import pandas as pd
 from PIL import Image, ImageDraw
+
+def handle_save_config(screen, e):
+    import tkinter as tk
+    from tkinter import filedialog
+    root = tk.Tk()
+    root.withdraw()
+    root.attributes('-topmost', True)
+    
+    file_path = filedialog.asksaveasfilename(
+        title="Save generator configuration",
+        defaultextension=".json",
+        filetypes=[("JSON files", "*.json"), ("All files", "*.*")]
+    )
+    root.destroy()
+
+    if file_path:
+        try:
+            config = {
+                "mode": screen.radio_group.value,
+                "spatial_type": screen.spatial_dropdown.value,
+                "size_type": screen.size_dropdown.value,
+                "color_scheme": screen.color_dropdown.value,
+                "sd_ratio": screen.sd_slider.value,
+                "min_dist_enabled": screen.min_dist_checkbox.value,
+                "min_dist_value": screen.min_dist_slider.value,
+                "total_area": screen.TA_settings.value,
+                "convex_hull_area": screen.CH_settings.value,
+                "anchor_n": screen.anchor_n.value,
+                "seed": screen.seed.value,
+                "theme_mode": getattr(screen, "_theme_cycle_state", "system"),
+            }
+
+            mode = screen.radio_group.value
+            if mode == "range":
+                config["field_min"] = getattr(screen, "field_min", ft.TextField()).value
+                config["field_max"] = getattr(screen, "field_max", ft.TextField()).value
+                config["field_count"] = getattr(screen, "field_count", ft.TextField()).value
+            elif mode == "fixed":
+                config["field_n"] = getattr(screen, "field_n", ft.TextField()).value
+                config["field_count"] = getattr(screen, "field_count", ft.TextField()).value
+            elif mode == "list":
+                config["field_list_nums"] = getattr(screen, "field_list_nums", ft.TextField()).value
+                config["field_count"] = getattr(screen, "field_count", ft.TextField()).value
+
+            with open(file_path, "w", encoding="utf-8") as f:
+                json.dump(config, f, indent=4)
+
+            screen.info_text.value = f"Configuration saved successfully!"
+            screen.update()
+        except Exception as ex:
+            screen.info_text.value = f"Config Save Error: {str(ex)}"
+            screen.update()
+
+def handle_load_config(screen, e):
+    import tkinter as tk
+    from tkinter import filedialog
+    root = tk.Tk()
+    root.withdraw()
+    root.attributes('-topmost', True)
+    
+    file_path = filedialog.askopenfilename(
+        title="Load generator configuration",
+        filetypes=[("JSON files", "*.json"), ("All files", "*.*")]
+    )
+    root.destroy()
+
+    if file_path:
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                config = json.load(f)
+
+            if "mode" in config:
+                screen.radio_group.value = config["mode"]
+                screen.handle_type_change(None)
+
+            if "spatial_type" in config:
+                screen.spatial_dropdown.value = config["spatial_type"]
+            if "size_type" in config:
+                screen.size_dropdown.value = config["size_type"]
+            if "color_scheme" in config:
+                screen.color_dropdown.value = config["color_scheme"]
+                screen.handle_color_change(None)
+
+            if "sd_ratio" in config:
+                screen.sd_slider.value = config["sd_ratio"]
+                screen.sd_slider.label = f"SD: {screen.sd_slider.value:.2f}"
+
+            if "min_dist_enabled" in config:
+                screen.min_dist_checkbox.value = config["min_dist_enabled"]
+                screen.min_dist_slider.disabled = not screen.min_dist_checkbox.value
+
+            if "min_dist_value" in config:
+                screen.min_dist_slider.value = config["min_dist_value"]
+                screen.min_dist_slider.label = f"MD: {screen.min_dist_slider.value:.2f}"
+
+            if "total_area" in config:
+                screen.TA_settings.value = config["total_area"]
+            if "convex_hull_area" in config:
+                screen.CH_settings.value = config["convex_hull_area"]
+            if "anchor_n" in config:
+                screen.anchor_n.value = config["anchor_n"]
+            if "seed" in config:
+                screen.seed.value = config["seed"]
+
+            mode = screen.radio_group.value
+            if mode == "range":
+                if "field_min" in config and hasattr(screen, "field_min"):
+                    screen.field_min.value = config["field_min"]
+                if "field_max" in config and hasattr(screen, "field_max"):
+                    screen.field_max.value = config["field_max"]
+                if "field_count" in config and hasattr(screen, "field_count"):
+                    screen.field_count.value = config["field_count"]
+            elif mode == "fixed":
+                if "field_n" in config and hasattr(screen, "field_n"):
+                    screen.field_n.value = config["field_n"]
+                if "field_count" in config and hasattr(screen, "field_count"):
+                    screen.field_count.value = config["field_count"]
+            elif mode == "list":
+                if "field_list_nums" in config and hasattr(screen, "field_list_nums"):
+                    screen.field_list_nums.value = config["field_list_nums"]
+                if "field_count" in config and hasattr(screen, "field_count"):
+                    screen.field_count.value = config["field_count"]
+
+            if "theme_mode" in config:
+                screen._theme_cycle_state = config["theme_mode"]
+                mode = screen._theme_cycle_state
+                if mode == "light":
+                    screen.page.theme_mode = ft.ThemeMode.LIGHT
+                    screen.theme_menu_btn.content.value = "Theme: Light"
+                    screen.theme_menu_btn.leading = ft.Icon(ft.Icons.LIGHT_MODE)
+                elif mode == "dark":
+                    screen.page.theme_mode = ft.ThemeMode.DARK
+                    screen.theme_menu_btn.content.value = "Theme: Dark"
+                    screen.theme_menu_btn.leading = ft.Icon(ft.Icons.DARK_MODE)
+                else:
+                    screen.page.theme_mode = ft.ThemeMode.SYSTEM
+                    screen.theme_menu_btn.content.value = "Theme: System"
+                    screen.theme_menu_btn.leading = ft.Icon(ft.Icons.BRIGHTNESS_AUTO)
+
+            screen.update()
+            screen.info_text.value = f"Configuration loaded successfully from {os.path.basename(file_path)}"
+            screen.update()
+
+        except Exception as ex:
+            screen.info_text.value = f"Config Load Error: {str(ex)}"
+            screen.update()
 
 def save_current_stimulus_png(screen, folder_path: str):
     if not screen.generated_datasets:

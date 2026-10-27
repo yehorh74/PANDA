@@ -6,7 +6,7 @@ from tkinter import filedialog
 from panda.generator import PANDA  
 
 from core.validators import parse_and_validate_inputs
-from core.exporters import save_current_stimulus_png, save_all, reset_all
+from core.exporters import save_current_stimulus_png, save_all, reset_all, handle_load_config, handle_save_config
 
 class GeneratorScreen(ft.View):
     def __init__(self, app):
@@ -20,16 +20,42 @@ class GeneratorScreen(ft.View):
         self.setup_ui()
 
     def setup_ui(self):
+        self.save_menu_btn = ft.MenuItemButton(
+            content=ft.Text("Save"),
+            leading=ft.Icon(ft.Icons.SAVE),
+            disabled=True,
+            on_click=self.handle_save_click
+        )
+        self.reset_menu_btn = ft.MenuItemButton(
+            content=ft.Text("Reset"),
+            leading=ft.Icon(ft.Icons.RESTORE),
+            disabled=True,
+            on_click=lambda e: reset_all(self, e)
+        )
+        self.theme_menu_btn = ft.MenuItemButton(
+            content=ft.Text("Theme: System"),
+            leading=ft.Icon(ft.Icons.BRIGHTNESS_AUTO),
+            on_click=self.toggle_theme
+        )
         self.app_menu = ft.MenuBar(
             expand=False,
+            style=ft.MenuStyle(
+                bgcolor=ft.Colors.TRANSPARENT,  
+                elevation=0,
+            ),
             controls=[
                 ft.SubmenuButton(
                     content=ft.Text("File"),
                     controls=[
                         ft.MenuItemButton(
-                            content=ft.Text("Export CSV"),
+                            content=ft.Text("Save Config"),
                             leading=ft.Icon(ft.Icons.SAVE),
-                            #on_click=self.handle_export_csv
+                            on_click=lambda e: handle_save_config(self, e)
+                        ),
+                        ft.MenuItemButton(
+                            content=ft.Text("Load Config"),
+                            leading=ft.Icon(ft.Icons.IMPORT_EXPORT),
+                            on_click=lambda e: handle_load_config(self, e)
                         ),
                         ft.MenuItemButton(
                             content=ft.Text("Quit"),
@@ -46,6 +72,14 @@ class GeneratorScreen(ft.View):
                             leading=ft.Icon(ft.Icons.REFRESH),
                             on_click=self.handle_generation
                         ),
+                        self.save_menu_btn,
+                        self.reset_menu_btn,
+                    ],
+                ),
+                ft.SubmenuButton(
+                    content=ft.Text("Settings"),
+                    controls=[
+                        self.theme_menu_btn
                     ],
                 ),
                 ft.SubmenuButton(
@@ -67,6 +101,16 @@ class GeneratorScreen(ft.View):
                 ft.VerticalDivider(width=20, thickness=0),
                 self.app_menu
             ], alignment=ft.MainAxisAlignment.START, spacing=0),
+            actions=[
+                ft.Container(
+                    content=ft.Text(value="MIT License, Copyright (c) 2026 Yehor Horin, Uniwersytet Warszawski", size=14, italic=True),
+                    padding=ft.Padding.only(right=15)  
+                ),
+                ft.Container(
+                    content=ft.Text(value=self.app.version, size=14, italic=True),
+                    padding=ft.Padding.only(right=15)  
+                )
+            ]
         )
         
         self.radio_group = ft.RadioGroup(
@@ -268,6 +312,46 @@ class GeneratorScreen(ft.View):
             ], expand=True)
         ]
 
+    def apply_initial_theme_ui(self, theme_mode: str):
+        self._theme_cycle_state = theme_mode
+        if theme_mode == "light":
+            self.theme_menu_btn.content.value = "Theme: Light"
+            self.theme_menu_btn.leading = ft.Icon(ft.Icons.LIGHT_MODE)
+        elif theme_mode == "dark":
+            self.theme_menu_btn.content.value = "Theme: Dark"
+            self.theme_menu_btn.leading = ft.Icon(ft.Icons.DARK_MODE)
+        else:
+            self.theme_menu_btn.content.value = "Theme: System"
+            self.theme_menu_btn.leading = ft.Icon(ft.Icons.BRIGHTNESS_AUTO)
+        self.update()
+
+    async def toggle_theme(self, e):
+        prefs = ft.SharedPreferences()
+        current_mode = getattr(self, "_theme_cycle_state", "system")
+
+        if current_mode == "system":
+            next_mode = "light"
+            self.app.page.theme_mode = ft.ThemeMode.LIGHT
+            self.theme_menu_btn.content.value = "Theme: Light"
+            self.theme_menu_btn.leading = ft.Icon(ft.Icons.LIGHT_MODE)
+        elif current_mode == "light":
+            next_mode = "dark"
+            self.app.page.theme_mode = ft.ThemeMode.DARK
+            self.theme_menu_btn.content.value = "Theme: Dark"
+            self.theme_menu_btn.leading = ft.Icon(ft.Icons.DARK_MODE)
+        else:
+            next_mode = "system"
+            self.app.page.theme_mode = ft.ThemeMode.SYSTEM
+            self.theme_menu_btn.content.value = "Theme: System"
+            self.theme_menu_btn.leading = ft.Icon(ft.Icons.BRIGHTNESS_AUTO)
+
+        self._theme_cycle_state = next_mode
+
+        await prefs.set("theme_mode", next_mode)
+
+        self.app.page.update()
+        self.update()
+
     def handle_save_click(self, e):
         root = tk.Tk()
         root.withdraw()
@@ -374,6 +458,8 @@ class GeneratorScreen(ft.View):
             self.save_png_btn.disabled = True
             self.save_btn.disabled = True  
             self.reset_btn.disabled = True
+            self.save_menu_btn.disabled = True
+            self.reset_menu_btn.disabled = True
         else:
             item = self.generated_datasets[self.current_index]
             self.index_label.value = f"{self.current_index + 1} of {total} (N={item['num']})"
@@ -384,6 +470,8 @@ class GeneratorScreen(ft.View):
             self.save_png_btn.disabled = False
             self.save_btn.disabled = False
             self.reset_btn.disabled = False
+            self.save_menu_btn.disabled = False
+            self.reset_menu_btn.disabled = False
 
             canvas_width = 700
             canvas_height = 700
