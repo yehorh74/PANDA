@@ -1,12 +1,19 @@
+import os
+import warnings
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 import flet as ft
+
 from screens.generator_screen import GeneratorScreen
 
 class App:
     def __init__(self, page: ft.Page):
         self.page = page
-        self.page.title = "PANDA - Dot Array Generator"
+        self.page.title = "PANDA (Python Automating Numerical Dot Algorithm)"
 
-        self.version = "v0.0.3"
+        self.version = "v0.0.4"
 
         self.generator_screen = GeneratorScreen(self)
 
@@ -30,6 +37,8 @@ class App:
         self.page.window.width = 1100
         self.page.window.height = 900
         self.page.window.resizable = False
+        self.page.window.maximizable = False  
+        self.page.window.full_screen = False
         self.page.window.update()
         
         try:
@@ -51,6 +60,9 @@ class App:
 
         if hasattr(self, "generator_screen") and self.generator_screen:
             self.generator_screen.apply_initial_theme_ui(saved_theme)
+
+        if hasattr(self, "generator_screen") and self.generator_screen:
+            self.page.on_keyboard_event = self.generator_screen.handle_keyboard_shortcuts
 
 async def main(page: ft.Page):
     app = App(page)

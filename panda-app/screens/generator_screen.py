@@ -21,19 +21,31 @@ class GeneratorScreen(ft.View):
 
     def setup_ui(self):
         self.save_menu_btn = ft.MenuItemButton(
-            content=ft.Text("Save"),
+            content=ft.Text("Save All   Ctrl+S"),
             leading=ft.Icon(ft.Icons.SAVE),
             disabled=True,
             on_click=self.handle_save_click
         )
         self.reset_menu_btn = ft.MenuItemButton(
-            content=ft.Text("Reset"),
+            content=ft.Text("Reset   Ctrl+R"),
             leading=ft.Icon(ft.Icons.RESTORE),
             disabled=True,
             on_click=lambda e: reset_all(self, e)
         )
+        self.save_current_btn = ft.MenuItemButton(
+            content=ft.Text("Save Current PNG   Ctrl+D"),
+            leading=ft.Icon(ft.Icons.DOWNLOAD),
+            disabled=True,
+            on_click=self.save_png
+        )
+        self.delete_current_btn = ft.MenuItemButton(
+            content=ft.Text("Delete Current   Del"),
+            leading=ft.Icon(ft.Icons.DELETE),
+            disabled=True,
+            on_click=self.delete_current
+        )
         self.theme_menu_btn = ft.MenuItemButton(
-            content=ft.Text("Theme: System"),
+            content=ft.Text("Theme: System   Ctrl+T"),
             leading=ft.Icon(ft.Icons.BRIGHTNESS_AUTO),
             on_click=self.toggle_theme
         )
@@ -48,17 +60,17 @@ class GeneratorScreen(ft.View):
                     content=ft.Text("File"),
                     controls=[
                         ft.MenuItemButton(
-                            content=ft.Text("Save Config"),
+                            content=ft.Text("Save Config   Ctrl+Shift+S"),
                             leading=ft.Icon(ft.Icons.SAVE),
                             on_click=lambda e: handle_save_config(self, e)
                         ),
                         ft.MenuItemButton(
-                            content=ft.Text("Load Config"),
+                            content=ft.Text("Load Config   Ctrl+O"),
                             leading=ft.Icon(ft.Icons.IMPORT_EXPORT),
                             on_click=lambda e: handle_load_config(self, e)
                         ),
                         ft.MenuItemButton(
-                            content=ft.Text("Quit"),
+                            content=ft.Text("Quit   Ctrl+Q"),
                             leading=ft.Icon(ft.Icons.CLOSE),
                             on_click=self.close_app
                         ),
@@ -68,10 +80,12 @@ class GeneratorScreen(ft.View):
                     content=ft.Text("Generator"),
                     controls=[
                         ft.MenuItemButton(
-                            content=ft.Text("Generate"),
+                            content=ft.Text("Generate   Ctrl+G"),
                             leading=ft.Icon(ft.Icons.REFRESH),
                             on_click=self.handle_generation
                         ),
+                        self.save_current_btn,
+                        self.delete_current_btn,
                         self.save_menu_btn,
                         self.reset_menu_btn,
                     ],
@@ -86,7 +100,7 @@ class GeneratorScreen(ft.View):
                     content=ft.Text("Help"),
                     controls=[
                         ft.MenuItemButton(
-                            content=ft.Text("Documentation"),
+                            content=ft.Text("Documentation   F1"),
                             leading=ft.Icon(ft.Icons.HELP_OUTLINE),
                             on_click=self.open_info
                         ),
@@ -312,16 +326,63 @@ class GeneratorScreen(ft.View):
             ], expand=True)
         ]
 
+    async def handle_keyboard_shortcuts(self, e: ft.KeyboardEvent):
+        is_ctrl = e.ctrl or e.meta
+        is_shift = e.shift
+        key = e.key.lower()
+
+        if is_ctrl and is_shift and key == "s":
+            handle_load_config(self, None)  
+
+        elif is_ctrl and not is_shift and key == "s":
+            if not self.save_menu_btn.disabled:
+                self.handle_save_click(None)
+
+        elif is_ctrl and key == "o":
+            handle_load_config(self, None)
+
+        elif is_ctrl and key == "q":
+            await self.close_app(None)
+
+        elif is_ctrl and key == "g":
+            self.handle_generation(None)
+
+        elif is_ctrl and key == "r":
+            if not self.reset_menu_btn.disabled:
+                reset_all(self, None)
+
+        elif is_ctrl and key == "t":
+            await self.toggle_theme(None)
+
+        elif e.key == "F1":
+            await self.open_info(None)
+
+        elif is_ctrl and key == "d":
+            if hasattr(self, "save_png_btn") and not self.save_png_btn.disabled:
+                self.save_png(None)
+
+        elif e.key == "Delete" or (is_ctrl and (key == "backspace" or key == "back")):
+            if hasattr(self, "delete_btn") and not self.delete_btn.disabled:
+                self.delete_current(None)
+
+        elif is_ctrl and e.key == "ArrowLeft":
+            if hasattr(self, "prev_btn") and not self.prev_btn.disabled:
+                self.prev_image(None)
+
+        elif is_ctrl and e.key == "ArrowRight":
+            if hasattr(self, "next_btn") and not self.next_btn.disabled:
+                self.next_image(None)
+
     def apply_initial_theme_ui(self, theme_mode: str):
         self._theme_cycle_state = theme_mode
         if theme_mode == "light":
-            self.theme_menu_btn.content.value = "Theme: Light"
+            self.theme_menu_btn.content.value = "Theme: Light    Ctrl+T"
             self.theme_menu_btn.leading = ft.Icon(ft.Icons.LIGHT_MODE)
         elif theme_mode == "dark":
-            self.theme_menu_btn.content.value = "Theme: Dark"
+            self.theme_menu_btn.content.value = "Theme: Dark     Ctrl+T"
             self.theme_menu_btn.leading = ft.Icon(ft.Icons.DARK_MODE)
         else:
-            self.theme_menu_btn.content.value = "Theme: System"
+            self.theme_menu_btn.content.value = "Theme: System   Ctrl+T"
             self.theme_menu_btn.leading = ft.Icon(ft.Icons.BRIGHTNESS_AUTO)
         self.update()
 
@@ -332,17 +393,17 @@ class GeneratorScreen(ft.View):
         if current_mode == "system":
             next_mode = "light"
             self.app.page.theme_mode = ft.ThemeMode.LIGHT
-            self.theme_menu_btn.content.value = "Theme: Light"
+            self.theme_menu_btn.content.value = "Theme: Light    Ctrl+T"
             self.theme_menu_btn.leading = ft.Icon(ft.Icons.LIGHT_MODE)
         elif current_mode == "light":
             next_mode = "dark"
             self.app.page.theme_mode = ft.ThemeMode.DARK
-            self.theme_menu_btn.content.value = "Theme: Dark"
+            self.theme_menu_btn.content.value = "Theme: Dark     Ctrl+T"
             self.theme_menu_btn.leading = ft.Icon(ft.Icons.DARK_MODE)
         else:
             next_mode = "system"
             self.app.page.theme_mode = ft.ThemeMode.SYSTEM
-            self.theme_menu_btn.content.value = "Theme: System"
+            self.theme_menu_btn.content.value = "Theme: System   Ctrl+T"
             self.theme_menu_btn.leading = ft.Icon(ft.Icons.BRIGHTNESS_AUTO)
 
         self._theme_cycle_state = next_mode
@@ -357,7 +418,7 @@ class GeneratorScreen(ft.View):
         root.withdraw()
         root.attributes('-topmost', True)
 
-        folder_path = filedialog.askdirectory(title="Select destination folder for export")
+        folder_path = filedialog.askdirectory(title="Select destination folder for export all stimulus")
 
         root.destroy()  
 
@@ -460,6 +521,8 @@ class GeneratorScreen(ft.View):
             self.reset_btn.disabled = True
             self.save_menu_btn.disabled = True
             self.reset_menu_btn.disabled = True
+            self.save_current_btn.disabled = True
+            self.delete_current_btn.disabled = True
         else:
             item = self.generated_datasets[self.current_index]
             self.index_label.value = f"{self.current_index + 1} of {total} (N={item['num']})"
@@ -472,6 +535,8 @@ class GeneratorScreen(ft.View):
             self.reset_btn.disabled = False
             self.save_menu_btn.disabled = False
             self.reset_menu_btn.disabled = False
+            self.save_current_btn.disabled = False
+            self.delete_current_btn.disabled = False
 
             canvas_width = 700
             canvas_height = 700
