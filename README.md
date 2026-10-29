@@ -11,6 +11,9 @@
 * PsychoPy integration.
 * Automatic scaling and geometric calculations.
 
+# Desktop version
+[Install the desktop version of PANDA](https://github.com/yehorh74/PANDA/releases/tag/PANDA_App_0.0.5)
+
 # Quick start
 
 ## Installation
