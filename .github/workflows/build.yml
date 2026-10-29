@@ -28,7 +28,7 @@ jobs:
       - name: Build executable with flet pack
         working-directory: panda-app
         run: |
-          flet pack main.py --icon assets/Panda_icon.ico --product-name "PANDA" --product-version "0.0.5" --copyright "Copyright (c) 2026 Yehor Horin"
+          flet pack main.py --name "PANDA"  --file-description "PANDA" --icon assets/Panda_icon.ico --product-name "PANDA" --product-version "0.0.5" --copyright "Copyright (c) 2026 Yehor Horin"
 
       - name: Upload built app as artifact
         uses: actions/upload-artifact@v4
