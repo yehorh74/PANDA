@@ -18,3 +18,5 @@ venv/
 *.pyc
 
 .flet/
+
+panda-app/dist/

@@ -19,12 +19,14 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
 
-      - name: Install project dependencies
+      - name: Install dependencies
+        working-directory: panda-app  
         run: |
           python -m pip install --upgrade pip
           pip install pyinstaller flet -r requirements.txt
 
       - name: Build executable with flet pack
+        working-directory: panda-app
         run: |
           flet pack main.py --icon assets/Panda_icon.ico --product-name "PANDA" --product-version "0.0.5" --copyright "Copyright (c) 2026 Yehor Horin"
 
@@ -32,4 +34,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: PANDA-Windows-Executable
-          path: dist/   
+          path: panda-app/dist/
