@@ -15,7 +15,7 @@ class PANDA:
     parameterization of multi-element dot arrays.
 
     Args:
-        window (visual.Window): The PsychoPy window in which to display the dot array.
+        window (visual.Window, optional): The PsychoPy window in which to display the dot array.
         n_anchor (int, optional): The number of anchor dots. Defaults to 3.
         base_ta (float, optional): The baseline Total Surface Area. Defaults to 30000.0.
         base_cha (float, optional): The baseline Convex Hull Area. Defaults to 120000.0.
