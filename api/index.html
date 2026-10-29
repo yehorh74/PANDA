@@ -610,7 +610,7 @@ parameterization of multi-element dot arrays.</p>
               </div>
             </td>
             <td>
-                <em>required</em>
+                  <code>None</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -1202,14 +1202,18 @@ parameterization of multi-element dot arrays.</p>
 <span class="normal">381</span>
 <span class="normal">382</span>
 <span class="normal">383</span>
-<span class="normal">384</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">PANDA</span><span class="p">:</span>
+<span class="normal">384</span>
+<span class="normal">385</span>
+<span class="normal">386</span>
+<span class="normal">387</span>
+<span class="normal">388</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">PANDA</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;PANDA (Python Automating Numerical Dot Algorithm).</span>
 
 <span class="sd">    An open algorithm dedicated to the precise generation and controlled</span>
 <span class="sd">    parameterization of multi-element dot arrays.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        window (visual.Window): The PsychoPy window in which to display the dot array.</span>
+<span class="sd">        window (visual.Window, optional): The PsychoPy window in which to display the dot array.</span>
 <span class="sd">        n_anchor (int, optional): The number of anchor dots. Defaults to 3.</span>
 <span class="sd">        base_ta (float, optional): The baseline Total Surface Area. Defaults to 30000.0.</span>
 <span class="sd">        base_cha (float, optional): The baseline Convex Hull Area. Defaults to 120000.0.</span>
@@ -1231,20 +1235,20 @@ parameterization of multi-element dot arrays.</p>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">window</span><span class="p">:</span> <span class="n">visual</span><span class="o">.</span><span class="n">Window</span><span class="p">,</span>
+        <span class="n">window</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">visual</span><span class="o">.</span><span class="n">Window</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">n_anchor</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
         <span class="n">base_ta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">30000.0</span><span class="p">,</span>
         <span class="n">base_cha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">120000.0</span><span class="p">,</span>
         <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
         <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">default_size</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">),</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">win</span> <span class="o">=</span> <span class="n">window</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default_size</span> <span class="o">=</span> <span class="n">default_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">n_anchor</span> <span class="o">=</span> <span class="n">n_anchor</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_ta</span> <span class="o">=</span> <span class="n">base_ta</span>
@@ -1270,7 +1274,7 @@ parameterization of multi-element dot arrays.</p>
             <span class="n">areas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">mean_area</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">sd_area</span> <span class="o">=</span> <span class="n">mean_area</span> <span class="o">*</span> <span class="n">sd_ratio</span>
-            <span class="n">areas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">mean_area</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sd_area</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">num</span><span class="p">)</span>
+            <span class="n">areas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">mean_area</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sd_area</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">num</span><span class="p">)</span>
             <span class="n">areas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">areas</span><span class="p">,</span> <span class="n">mean_area</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">areas</span> <span class="o">*=</span> <span class="n">target_tsa</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">areas</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">areas</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
@@ -1291,9 +1295,7 @@ parameterization of multi-element dot arrays.</p>
             <span class="n">perims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">mean_perim</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">sd_perim</span> <span class="o">=</span> <span class="n">mean_perim</span> <span class="o">*</span> <span class="n">sd_ratio</span>
-            <span class="n">perims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span>
-                <span class="n">loc</span><span class="o">=</span><span class="n">mean_perim</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sd_perim</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">num</span>
-            <span class="p">)</span>
+            <span class="n">perims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">mean_perim</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sd_perim</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">num</span><span class="p">)</span>
             <span class="n">perims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">perims</span><span class="p">,</span> <span class="n">mean_perim</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">perims</span> <span class="o">*=</span> <span class="n">target_tp</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">perims</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">perims</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
@@ -1399,7 +1401,8 @@ parameterization of multi-element dot arrays.</p>
             <span class="n">radii</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_radii_tp</span><span class="p">(</span><span class="n">num_elements</span><span class="p">,</span> <span class="n">size_val</span><span class="p">,</span> <span class="n">sd_ratio</span><span class="p">)</span>
 
         <span class="n">max_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">radii</span><span class="p">)</span>
-        <span class="n">half_win</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">win</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+        <span class="n">win_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">win</span><span class="o">.</span><span class="n">size</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">win</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_size</span>
+        <span class="n">half_win</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">win_size</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
         <span class="n">safe_margin</span> <span class="o">=</span> <span class="n">half_win</span> <span class="o">-</span> <span class="n">max_r</span> <span class="o">-</span> <span class="mf">10.0</span>
 
         <span class="k">if</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;CH&#39;</span><span class="p">:</span>
@@ -1416,8 +1419,8 @@ parameterization of multi-element dot arrays.</p>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_elements</span><span class="p">):</span>
                 <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
                 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2000</span><span class="p">):</span>
-                    <span class="n">angle</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-                    <span class="n">dist</span> <span class="o">=</span> <span class="n">target_spawn_radius</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">())</span>
+                    <span class="n">angle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+                    <span class="n">dist</span> <span class="o">=</span> <span class="n">target_spawn_radius</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">())</span>
                     <span class="n">new_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
                         <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">*</span> <span class="n">dist</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">*</span> <span class="n">dist</span><span class="p">]</span>
                     <span class="p">)</span>
@@ -1455,17 +1458,20 @@ parameterization of multi-element dot arrays.</p>
                     <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">dists_matrix</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
 
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">dists_matrix</span> <span class="o">&lt;</span> <span class="n">radii_sum</span><span class="p">):</span>
-                        <span class="n">dots</span> <span class="o">=</span> <span class="p">[</span>
-                            <span class="n">visual</span><span class="o">.</span><span class="n">Circle</span><span class="p">(</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">win</span><span class="p">,</span>
-                                <span class="n">radius</span><span class="o">=</span><span class="n">radii</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                                <span class="n">pos</span><span class="o">=</span><span class="n">final_positions</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                                <span class="n">fillColor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">,</span>
-                                <span class="n">lineColor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">,</span>
-                                <span class="n">edges</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
-                            <span class="p">)</span>
-                            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_elements</span><span class="p">)</span>
-                        <span class="p">]</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">win</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="n">dots</span> <span class="o">=</span> <span class="p">[</span>
+                                <span class="n">visual</span><span class="o">.</span><span class="n">Circle</span><span class="p">(</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">win</span><span class="p">,</span>
+                                    <span class="n">radius</span><span class="o">=</span><span class="n">radii</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                    <span class="n">pos</span><span class="o">=</span><span class="n">final_positions</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                    <span class="n">fillColor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">,</span>
+                                    <span class="n">lineColor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">,</span>
+                                    <span class="n">edges</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+                                <span class="p">)</span>
+                                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_elements</span><span class="p">)</span>
+                            <span class="p">]</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">dots</span> <span class="o">=</span> <span class="p">[]</span>
                         <span class="k">return</span> <span class="n">dots</span><span class="p">,</span> <span class="n">radii</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">final_positions</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
@@ -1534,6 +1540,8 @@ parameterization of multi-element dot arrays.</p>
 <span class="sd">        Returns:</span>
 <span class="sd">            List[visual.Circle]: the list of generated dot objects</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">win</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;PsychoPy window is required to execute generate_and_save()!&quot;</span><span class="p">)</span>
         <span class="n">dots</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">positions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_balanced_set</span><span class="p">(</span>
             <span class="n">num_elements</span><span class="o">=</span><span class="n">num_elements</span><span class="p">,</span>
             <span class="n">spatial_type</span><span class="o">=</span><span class="n">spatial_type</span><span class="p">,</span>
@@ -1774,9 +1782,7 @@ parameterization of multi-element dot arrays.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>panda\generator.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">317</span>
-<span class="normal">318</span>
-<span class="normal">319</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">319</span>
 <span class="normal">320</span>
 <span class="normal">321</span>
 <span class="normal">322</span>
@@ -1819,7 +1825,11 @@ parameterization of multi-element dot arrays.</p>
 <span class="normal">359</span>
 <span class="normal">360</span>
 <span class="normal">361</span>
-<span class="normal">362</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_and_save</span><span class="p">(</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_and_save</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">num_elements</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">spatial_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1845,6 +1855,8 @@ parameterization of multi-element dot arrays.</p>
 <span class="sd">    Returns:</span>
 <span class="sd">        List[visual.Circle]: the list of generated dot objects</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">win</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;PsychoPy window is required to execute generate_and_save()!&quot;</span><span class="p">)</span>
     <span class="n">dots</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">positions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_balanced_set</span><span class="p">(</span>
         <span class="n">num_elements</span><span class="o">=</span><span class="n">num_elements</span><span class="p">,</span>
         <span class="n">spatial_type</span><span class="o">=</span><span class="n">spatial_type</span><span class="p">,</span>
@@ -2038,7 +2050,9 @@ parameterization of multi-element dot arrays.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>panda\generator.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">164</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
 <span class="normal">165</span>
 <span class="normal">166</span>
 <span class="normal">167</span>
@@ -2153,7 +2167,9 @@ parameterization of multi-element dot arrays.</p>
 <span class="normal">276</span>
 <span class="normal">277</span>
 <span class="normal">278</span>
-<span class="normal">279</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_balanced_set</span><span class="p">(</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_balanced_set</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">num_elements</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">spatial_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -2197,7 +2213,8 @@ parameterization of multi-element dot arrays.</p>
         <span class="n">radii</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_radii_tp</span><span class="p">(</span><span class="n">num_elements</span><span class="p">,</span> <span class="n">size_val</span><span class="p">,</span> <span class="n">sd_ratio</span><span class="p">)</span>
 
     <span class="n">max_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">radii</span><span class="p">)</span>
-    <span class="n">half_win</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">win</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+    <span class="n">win_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">win</span><span class="o">.</span><span class="n">size</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">win</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_size</span>
+    <span class="n">half_win</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">win_size</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
     <span class="n">safe_margin</span> <span class="o">=</span> <span class="n">half_win</span> <span class="o">-</span> <span class="n">max_r</span> <span class="o">-</span> <span class="mf">10.0</span>
 
     <span class="k">if</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;CH&#39;</span><span class="p">:</span>
@@ -2214,8 +2231,8 @@ parameterization of multi-element dot arrays.</p>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_elements</span><span class="p">):</span>
             <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2000</span><span class="p">):</span>
-                <span class="n">angle</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-                <span class="n">dist</span> <span class="o">=</span> <span class="n">target_spawn_radius</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">())</span>
+                <span class="n">angle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+                <span class="n">dist</span> <span class="o">=</span> <span class="n">target_spawn_radius</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">())</span>
                 <span class="n">new_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
                     <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">*</span> <span class="n">dist</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">*</span> <span class="n">dist</span><span class="p">]</span>
                 <span class="p">)</span>
@@ -2253,17 +2270,20 @@ parameterization of multi-element dot arrays.</p>
                 <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">dists_matrix</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">dists_matrix</span> <span class="o">&lt;</span> <span class="n">radii_sum</span><span class="p">):</span>
-                    <span class="n">dots</span> <span class="o">=</span> <span class="p">[</span>
-                        <span class="n">visual</span><span class="o">.</span><span class="n">Circle</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">win</span><span class="p">,</span>
-                            <span class="n">radius</span><span class="o">=</span><span class="n">radii</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                            <span class="n">pos</span><span class="o">=</span><span class="n">final_positions</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                            <span class="n">fillColor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">,</span>
-                            <span class="n">lineColor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">,</span>
-                            <span class="n">edges</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
-                        <span class="p">)</span>
-                        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_elements</span><span class="p">)</span>
-                    <span class="p">]</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">win</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">dots</span> <span class="o">=</span> <span class="p">[</span>
+                            <span class="n">visual</span><span class="o">.</span><span class="n">Circle</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">win</span><span class="p">,</span>
+                                <span class="n">radius</span><span class="o">=</span><span class="n">radii</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                <span class="n">pos</span><span class="o">=</span><span class="n">final_positions</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                <span class="n">fillColor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">,</span>
+                                <span class="n">lineColor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">,</span>
+                                <span class="n">edges</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+                            <span class="p">)</span>
+                            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_elements</span><span class="p">)</span>
+                        <span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">dots</span> <span class="o">=</span> <span class="p">[]</span>
                     <span class="k">return</span> <span class="n">dots</span><span class="p">,</span> <span class="n">radii</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">final_positions</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
@@ -2314,13 +2334,13 @@ parameterization of multi-element dot arrays.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>panda\generator.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">364</span>
-<span class="normal">365</span>
-<span class="normal">366</span>
-<span class="normal">367</span>
-<span class="normal">368</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">368</span>
 <span class="normal">369</span>
-<span class="normal">370</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="normal">370</span>
+<span class="normal">371</span>
+<span class="normal">372</span>
+<span class="normal">373</span>
+<span class="normal">374</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return all logged stimulus ground-truth metrics as a pandas DataFrame.</span>
 
 <span class="sd">    Returns:</span>
@@ -2435,9 +2455,7 @@ parameterization of multi-element dot arrays.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>panda\generator.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">281</span>
-<span class="normal">282</span>
-<span class="normal">283</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">283</span>
 <span class="normal">284</span>
 <span class="normal">285</span>
 <span class="normal">286</span>
@@ -2469,7 +2487,9 @@ parameterization of multi-element dot arrays.</p>
 <span class="normal">312</span>
 <span class="normal">313</span>
 <span class="normal">314</span>
-<span class="normal">315</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">log_ground_truth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_elements</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">radii</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">positions</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">log_ground_truth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_elements</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">radii</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">positions</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute and log exact geometric ground-truth metrics for the generated dot array.</span>
 
 <span class="sd">    Args:</span>
@@ -2526,10 +2546,10 @@ parameterization of multi-element dot arrays.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>panda\generator.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">372</span>
-<span class="normal">373</span>
-<span class="normal">374</span>
-<span class="normal">375</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">reset_results</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">reset_results</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Clear all stored ground-truth metrics from internal memory.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
@@ -2586,14 +2606,14 @@ parameterization of multi-element dot arrays.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>panda\generator.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">377</span>
-<span class="normal">378</span>
-<span class="normal">379</span>
-<span class="normal">380</span>
-<span class="normal">381</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">381</span>
 <span class="normal">382</span>
 <span class="normal">383</span>
-<span class="normal">384</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">save_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">384</span>
+<span class="normal">385</span>
+<span class="normal">386</span>
+<span class="normal">387</span>
+<span class="normal">388</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">save_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Export all accumulated ground-truth metrics to a CSV file.</span>
 
 <span class="sd">    Args:</span>
