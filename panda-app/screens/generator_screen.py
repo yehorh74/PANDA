@@ -104,6 +104,11 @@ class GeneratorScreen(ft.View):
                             leading=ft.Icon(ft.Icons.HELP_OUTLINE),
                             on_click=self.open_info
                         ),
+                        ft.MenuItemButton(
+                            content=ft.Text("How to Use?   F2"),
+                            leading=ft.Icon(ft.Icons.QUESTION_MARK),
+                            on_click=self.open_info_dialog
+                        ),
                     ],
                 ),
             ],
@@ -126,6 +131,23 @@ class GeneratorScreen(ft.View):
                 )
             ]
         )
+
+        num_elements_section = ft.Column([
+            ft.Row([
+                ft.Text("Number of elements", size=18, weight=ft.FontWeight.BOLD),
+                ft.Icon(
+                    icon=ft.Icons.HELP_OUTLINE,
+                    size=16,
+                    color=ft.Colors.GREY_500,
+                    tooltip=(
+                        "Defines how the element count is determined:\n"
+                        "• Range: Randomly varies within a specified min-max range.\n"
+                        "• Fixed: Uses a constant number of elements.\n"
+                        "• List: Cycles through a predefined sequence of counts."
+                    )
+                )
+            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=300),
+        ], spacing=5)
         
         self.radio_group = ft.RadioGroup(
             value="range",
@@ -145,7 +167,6 @@ class GeneratorScreen(ft.View):
         self.handle_type_change(None)
         
         self.spatial_dropdown = ft.Dropdown(
-            label="Spatial Type",
             value="CH",
             options=[
                 ft.dropdown.Option("CH", "Convex Hull (CH)"),
@@ -154,8 +175,21 @@ class GeneratorScreen(ft.View):
             width=300
         )
 
+        spatial_section = ft.Column([
+            ft.Row([
+                ft.Text("Spatial Type", size=14, weight=ft.FontWeight.W_500),
+                ft.Icon(
+                    icon=ft.Icons.HELP_OUTLINE,
+                    size=16,
+                    color=ft.Colors.GREY_500,
+                    tooltip="The spatial condition type ('CH' for Convex Hull, 'ID' for Inter-Distance)."
+                )
+            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=300),
+            self.spatial_dropdown
+        ], spacing=5)
+
+
         self.size_dropdown = ft.Dropdown(
-            label="Size Type",
             value="TA",
             options=[
                 ft.dropdown.Option("TA", "Total Area (TA)"),
@@ -164,8 +198,20 @@ class GeneratorScreen(ft.View):
             width=300
         )
 
+        size_section = ft.Column([
+            ft.Row([
+                ft.Text("Size Type", size=14, weight=ft.FontWeight.W_500),
+                ft.Icon(
+                    icon=ft.Icons.HELP_OUTLINE,
+                    size=16,
+                    color=ft.Colors.GREY_500,
+                    tooltip="The size condition type ('TA' for Total Area, 'TP' for Total Perimeter)."
+                )
+            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=300),
+            self.size_dropdown
+        ], spacing=5)
+
         self.color_dropdown = ft.Dropdown(
-            label="Color scheme",
             value="black_on_white",
             options=[
                 ft.dropdown.Option("black_on_white", "Black on White"),
@@ -175,7 +221,32 @@ class GeneratorScreen(ft.View):
             on_select=self.handle_color_change
         )
 
-        self.sd_text = ft.Text("Size variability", size=14)
+        color_section = ft.Column([
+            ft.Row([
+                ft.Text("Color scheme", size=14, weight=ft.FontWeight.W_500),
+                ft.Icon(
+                    icon=ft.Icons.HELP_OUTLINE,
+                    size=16,
+                    color=ft.Colors.GREY_500,
+                    tooltip="Determines the color contrast scheme of the stimuli.\n• Black on White – black elements on a white background\n• White on Black – white elements on a black background"
+                )
+            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=300),
+            self.color_dropdown
+        ], spacing=5)
+
+        self.sd_text = ft.Text("Size variability", size=14, weight=ft.FontWeight.W_500)
+
+        sd_section = ft.Column([
+            ft.Row([
+                self.sd_text,
+                ft.Icon(
+                    icon=ft.Icons.HELP_OUTLINE,
+                    size=16,
+                    color=ft.Colors.GREY_500,
+                    tooltip="Standard deviation ratio of the dot sizes."
+                )
+            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=300),
+        ], spacing=5)
 
         self.sd_slider = ft.Slider(
             min=0.0,
@@ -188,10 +259,23 @@ class GeneratorScreen(ft.View):
 
         self.min_dist_checkbox = ft.Checkbox(
             label="Min spacing between elements",
+            label_style=ft.TextStyle(size=14, weight=ft.FontWeight.W_500),
             value=False,
             label_position=ft.LabelPosition.LEFT,
-            on_change=self.min_dist_toggle
+            on_change=self.min_dist_toggle,
         )
+
+        min_dist_section = ft.Column([
+            ft.Row([
+                self.min_dist_checkbox,
+                ft.Icon(
+                    icon=ft.Icons.HELP_OUTLINE,
+                    size=16,
+                    color=ft.Colors.GREY_500,
+                    tooltip="The minimum distance factor between dots."
+                )
+            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=300)
+        ], spacing=5)
 
         self.min_dist_slider = ft.Slider(
             min=0.5,
@@ -203,10 +287,66 @@ class GeneratorScreen(ft.View):
             on_change=self.min_dist_changed
         )
 
-        self.TA_settings = ft.TextField(label="Total Area", value="30000.0", width=300, keyboard_type=ft.KeyboardType.NUMBER, input_filter=ft.InputFilter(regex_string=r"[0-9.]"))
-        self.CH_settings = ft.TextField(label="Convex Hull Area", value="120000.0", width=300, keyboard_type=ft.KeyboardType.NUMBER, input_filter=ft.InputFilter(regex_string=r"[0-9.]"))
-        self.anchor_n = ft.TextField(label="Number of Anchors", value="3", width=300, keyboard_type=ft.KeyboardType.NUMBER, input_filter=ft.NumbersOnlyInputFilter())
-        self.seed = ft.TextField(label="Random Seed (optional)", value="", width=300, keyboard_type=ft.KeyboardType.NUMBER, input_filter=ft.NumbersOnlyInputFilter())
+        self.TA_settings = ft.TextField(value="30000.0", width=300, keyboard_type=ft.KeyboardType.NUMBER, input_filter=ft.InputFilter(regex_string=r"[0-9.]"))
+
+        ta_section = ft.Column([
+            ft.Row([
+                ft.Text("Total Area", size=14, weight=ft.FontWeight.W_500),
+                ft.Icon(
+                    icon=ft.Icons.HELP_OUTLINE,
+                    size=16,
+                    color=ft.Colors.GREY_500,
+                    tooltip="The baseline Total Surface Area."
+                )
+            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=300),
+            self.TA_settings
+        ], spacing=5)
+
+        self.CH_settings = ft.TextField(value="120000.0", width=300, keyboard_type=ft.KeyboardType.NUMBER, input_filter=ft.InputFilter(regex_string=r"[0-9.]"))
+
+        ch_section = ft.Column([
+            ft.Row([
+                ft.Text("Convex Hull", size=14, weight=ft.FontWeight.W_500),
+                ft.Icon(
+                    icon=ft.Icons.HELP_OUTLINE,
+                    size=16,
+                    color=ft.Colors.GREY_500,
+                    tooltip="The baseline Convex Hull Area."
+                )
+            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=300),
+            self.CH_settings
+        ], spacing=5)
+        
+        self.anchor_n = ft.TextField(value="3", width=300, keyboard_type=ft.KeyboardType.NUMBER, input_filter=ft.NumbersOnlyInputFilter())
+
+        anchors_section = ft.Column([
+            ft.Row([
+                ft.Text("Number of Anchors", size=14, weight=ft.FontWeight.W_500),
+                ft.Icon(
+                    icon=ft.Icons.HELP_OUTLINE,
+                    size=16,
+                    color=ft.Colors.GREY_500,
+                    tooltip="The number of anchor dots."
+                )
+            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=300),
+            self.anchor_n
+        ], spacing=5)
+        
+        self.seed = ft.TextField(label="e.g. 1234", value="", width=300, keyboard_type=ft.KeyboardType.NUMBER, input_filter=ft.NumbersOnlyInputFilter())
+
+        seed_section = ft.Column([
+            ft.Row([
+                ft.Text("Random Seed (optional)", size=14, weight=ft.FontWeight.W_500),
+                ft.Icon(
+                    icon=ft.Icons.HELP_OUTLINE,
+                    size=16,
+                    color=ft.Colors.GREY_500,
+                    tooltip="The random seed for reproducibility."
+                )
+            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=300),
+            self.seed
+        ], spacing=5)
+        
         self.info_text = ft.Text("Ready.", size=14, color=ft.Colors.GREY_700)
 
         generate_btn = ft.Button(
@@ -294,24 +434,24 @@ class GeneratorScreen(ft.View):
                 ft.VerticalDivider(width=1),
                 ft.Container(
                     content=ft.Column([
-                        ft.Text("Number of elements", size=18, weight=ft.FontWeight.BOLD),
+                        num_elements_section,
                         self.radio_group,
                         self.num_container,
                         ft.Divider(),
                         ft.Text("Parameters", size=18, weight=ft.FontWeight.BOLD),
-                        self.spatial_dropdown,
-                        self.size_dropdown,
-                        self.color_dropdown,
-                        self.sd_text,
+                        spatial_section,
+                        size_section,
+                        color_section,
+                        sd_section,
                         self.sd_slider,
-                        self.min_dist_checkbox,
+                        min_dist_section,
                         self.min_dist_slider,
                         ft.Divider(),
                         ft.Text("Advanced settings", size=18, weight=ft.FontWeight.BOLD),
-                        self.TA_settings,
-                        self.CH_settings,
-                        self.anchor_n,
-                        self.seed,
+                        ta_section,
+                        ch_section,
+                        anchors_section,
+                        seed_section,
                         ft.Divider(),
                         generate_btn,
                         self.save_btn,
@@ -325,6 +465,73 @@ class GeneratorScreen(ft.View):
                 ),
             ], expand=True)
         ]
+
+    def open_info_dialog(self, e):
+        docs_markdown = """
+### 📖 How to Use
+
+1. **Configure Parameters**
+   - Set your desired psychophysical settings in the sidebar: **Spatial Type** (Convex Hull vs. Inter-Distance), **Size Type** (Total Area vs. Total Perimeter), **Number of Elements** (Fixed, Range, or List), and **Color Scheme**.
+   - Hover over any **`?` help icon** next to parameters for detailed algorithmic definitions.
+
+2. **Generate Stimuli**
+   - Click the **Generate** button in the menu or press **`Ctrl + G`** to run the algorithm and create your stimulus set.
+
+3. **Preview & Manage Results**
+   - Use the navigation buttons or shortcuts (**`Ctrl + ArrowLeft` / `Ctrl + ArrowRight`**) to browse through generated stimuli.
+   - Instantly save a single stimulus and its ground truth using **`Ctrl + D`**, or remove unwanted items using the **`Delete`** key.
+
+4. **Export & Save**
+   - Click **Save All** (**`Ctrl + S`**) to export the full set of images along with the complete `ground_truth.csv` file.
+   - Use **`Ctrl + Shift + S`** to save your current generator configuration to a JSON file for future replications.
+
+### 💡 Tips & Algorithmic Notes
+
+* **Spatial Control (CH vs. ID):** 
+  * *Convex Hull (CH)* regulates spatial dispersion by constraining the total bounding area of the elements. 
+  * *Inter-Distance (ID)* focuses on nearest-neighbor spacing, ideal when controlling local visual crowding.
+* **Size Metric Balance (TA vs. TP):** 
+  * Choose *Total Area (TA)* or *Total Perimeter (TP)* depending on whether cumulative surface or contour length is the critical variable in your psychophysical design.
+* **Automatic Ground Truth Derivation (ID & TP):** 
+  * Even when you choose primary constraints (such as TA or CH), the PANDA algorithm **automatically computes and exports secondary metrics** (Inter-Distance and Total Perimeter) for every generated stimulus, ensuring you have complete data available in the `ground_truth.csv` for post-hoc analysis.
+* **Anchors (Kotwice):** 
+  * Use anchor settings to fix specific reference elements in precise coordinates across trials, allowing you to maintain spatial orientation or alignment while other elements vary randomly.
+* **Minimum Distance Enforcement:** 
+  * The algorithm respects strict separation boundaries; configuring the minimum distance prevents element overlap and controls local density extremes.
+* **Deconfounding Variables:** 
+  * Utilizing *Range* or *List* modes for element counts helps decorrelate numerosity from continuous visual properties (like total area) across experimental trials.
+* **Workflow Speed:** 
+  * Combine **`Ctrl + G`** (Generate) and **`Ctrl + S`** (Save All) to rapidly prototype and batch-export stimulus sets without touching the mouse.
+        """
+
+        page_ref = getattr(self, "app", None) and getattr(self.app, "page", None)
+        if not page_ref:
+            page_ref = getattr(self, "page", None)
+
+        if not page_ref:
+            print("-> BŁĄD: Nie znaleziono referencji do page!")
+            return
+
+        dialog = ft.AlertDialog(
+            title=ft.Row([
+                ft.Icon(ft.Icons.HELP_OUTLINE, color=ft.Colors.BLUE),
+                ft.Text("How to Use PANDA?", weight=ft.FontWeight.BOLD)
+            ]),
+            content=ft.Container(
+                content=ft.ListView(
+                    controls=[ft.Markdown(docs_markdown, selectable=True)],
+                    expand=True,
+                ),
+                width=680,
+                height=520,
+            ),
+            actions=[
+                ft.TextButton("Close", on_click=lambda event: page_ref.pop_dialog())
+            ],
+            actions_alignment=ft.MainAxisAlignment.END,
+        )
+
+        page_ref.show_dialog(dialog)
 
     async def handle_keyboard_shortcuts(self, e: ft.KeyboardEvent):
         is_ctrl = e.ctrl or e.meta
@@ -356,6 +563,9 @@ class GeneratorScreen(ft.View):
 
         elif e.key == "F1":
             await self.open_info(None)
+
+        elif e.key == "F2":
+            self.open_info_dialog(None)
 
         elif is_ctrl and key == "d":
             if hasattr(self, "save_png_btn") and not self.save_png_btn.disabled:
