@@ -15,7 +15,7 @@ class PANDA:
     parameterization of multi-element dot arrays.
 
     Args:
-        window (visual.Window): The PsychoPy window in which to display the dot array.
+        window (visual.Window, optional): The PsychoPy window in which to display the dot array.
         n_anchor (int, optional): The number of anchor dots. Defaults to 3.
         base_ta (float, optional): The baseline Total Surface Area. Defaults to 30000.0.
         base_cha (float, optional): The baseline Convex Hull Area. Defaults to 120000.0.
@@ -37,20 +37,20 @@ class PANDA:
 
     def __init__(
         self,
-        window: visual.Window,
+        window: Optional[visual.Window] = None,
         n_anchor: int = 3,
         base_ta: float = 30000.0,
         base_cha: float = 120000.0,
         color: str = "black",
         seed: Optional[int] = None,
+        default_size: Tuple[int, int] = (700, 700),
     ):
         self.win = window
+        self.default_size = default_size
         self.color = color
         self.results: List[Dict[str, Any]] = []
 
         self.rng = np.random.default_rng(seed)
-        if seed is not None:
-            random.seed(seed)
 
         self.n_anchor = n_anchor
         self.base_ta = base_ta
@@ -76,7 +76,7 @@ class PANDA:
             areas = np.full(num, mean_area)
         else:
             sd_area = mean_area * sd_ratio
-            areas = np.random.normal(loc=mean_area, scale=sd_area, size=num)
+            areas = self.rng.normal(loc=mean_area, scale=sd_area, size=num)
             areas = np.clip(areas, mean_area * 0.1, None)
         areas *= target_tsa / np.sum(areas)
         return np.sqrt(areas / np.pi)
@@ -97,9 +97,7 @@ class PANDA:
             perims = np.full(num, mean_perim)
         else:
             sd_perim = mean_perim * sd_ratio
-            perims = np.random.normal(
-                loc=mean_perim, scale=sd_perim, size=num
-            )
+            perims = self.rng.normal(loc=mean_perim, scale=sd_perim, size=num)
             perims = np.clip(perims, mean_perim * 0.1, None)
         perims *= target_tp / np.sum(perims)
         return perims / (2 * np.pi)
@@ -205,7 +203,8 @@ class PANDA:
             radii = self._get_radii_tp(num_elements, size_val, sd_ratio)
 
         max_r = np.max(radii)
-        half_win = min(self.win.size) / 2.0
+        win_size = self.win.size if self.win is not None else self.default_size
+        half_win = min(win_size) / 2.0
         safe_margin = half_win - max_r - 10.0
 
         if spatial_type == 'CH':
@@ -222,8 +221,8 @@ class PANDA:
             for i in range(num_elements):
                 found = False
                 for _ in range(2000):
-                    angle = random.uniform(0, 2 * np.pi)
-                    dist = target_spawn_radius * np.sqrt(random.random())
+                    angle = self.rng.uniform(0, 2 * np.pi)
+                    dist = target_spawn_radius * np.sqrt(self.rng.random())
                     new_pos = np.array(
                         [np.cos(angle) * dist, np.sin(angle) * dist]
                     )
@@ -261,17 +260,20 @@ class PANDA:
                     np.fill_diagonal(dists_matrix, np.inf)
 
                     if not np.any(dists_matrix < radii_sum):
-                        dots = [
-                            visual.Circle(
-                                self.win,
-                                radius=radii[i],
-                                pos=final_positions[i],
-                                fillColor=self.color,
-                                lineColor=self.color,
-                                edges=128,
-                            )
-                            for i in range(num_elements)
-                        ]
+                        if self.win is not None:
+                            dots = [
+                                visual.Circle(
+                                    self.win,
+                                    radius=radii[i],
+                                    pos=final_positions[i],
+                                    fillColor=self.color,
+                                    lineColor=self.color,
+                                    edges=128,
+                                )
+                                for i in range(num_elements)
+                            ]
+                        else:
+                            dots = []
                         return dots, radii.tolist(), final_positions.tolist()
 
         raise RuntimeError(
@@ -340,6 +342,8 @@ class PANDA:
         Returns:
             List[visual.Circle]: the list of generated dot objects
         """
+        if self.win is None:
+            raise RuntimeError("PsychoPy window is required to execute generate_and_save()!")
         dots, radii, positions = self.generate_balanced_set(
             num_elements=num_elements,
             spatial_type=spatial_type,
