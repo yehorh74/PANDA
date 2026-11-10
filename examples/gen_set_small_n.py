@@ -39,7 +39,7 @@ for spatial_type, size_type in CONDITIONS:
                     pause_time=0
                 )
             except Exception as e:
-                print(f'Błąd [N={n_val}, próba {i}]: {e}')
+                print(f'Error [N={n_val}, trial {i}]: {e}')
 
     gen.save_csv(os.path.join(out_dir, f'results_{condition_name}.csv'))
 
