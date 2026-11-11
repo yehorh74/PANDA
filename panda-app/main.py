@@ -13,7 +13,7 @@ class App:
         self.page = page
         self.page.title = "PANDA (Python Automating Numerical Dot Algorithm)"
 
-        self.version = "v0.0.5"
+        self.version = "v0.1.0"
 
         self.generator_screen = GeneratorScreen(self)
 

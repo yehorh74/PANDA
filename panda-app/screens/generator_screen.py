@@ -12,7 +12,7 @@ class GeneratorScreen(ft.View):
     def __init__(self, app):
         super().__init__(route="/generator")
         self.app = app
-        self.generator = PANDA(window=None)
+        self.generator = PANDA(window=None, n_anchor=3, base_ta=None, base_cha=None)
         
         self.generated_datasets = []
         self.current_index = 0
@@ -79,6 +79,11 @@ class GeneratorScreen(ft.View):
                 ft.SubmenuButton(
                     content=ft.Text("Generator"),
                     controls=[
+                        ft.MenuItemButton(
+                            content=ft.Text("Calculate and Apply Parameters   Ctrl+C"),
+                            leading=ft.Icon(ft.Icons.CALCULATE),
+                            on_click=self.handle_calculate
+                        ),
                         ft.MenuItemButton(
                             content=ft.Text("Generate   Ctrl+G"),
                             leading=ft.Icon(ft.Icons.REFRESH),
@@ -171,6 +176,9 @@ class GeneratorScreen(ft.View):
             options=[
                 ft.dropdown.Option("CH", "Convex Hull (CH)"),
                 ft.dropdown.Option("ID", "Inter-Distance (ID)"),
+                ft.dropdown.Option("Density_num", "Density (numerical)"),
+                ft.dropdown.Option("Density_surf", "Density (surface)"),
+                ft.dropdown.Option("MO", "Mean Occupancy (MO)"),
             ],
             width=300
         )
@@ -349,6 +357,17 @@ class GeneratorScreen(ft.View):
         
         self.info_text = ft.Text("Ready.", size=14, color=ft.Colors.GREY_700)
 
+        calculate_btn = ft.Button(
+            content=ft.Text("Calculate and Apply Parameters"),
+            on_click=self.handle_calculate,
+            width=300,  
+            style=ft.ButtonStyle(
+                shape=ft.RoundedRectangleBorder(
+                    radius=4
+                )  
+            ),
+        )
+
         generate_btn = ft.Button(
             content=ft.Text("Generate"),
             on_click=self.handle_generation,
@@ -390,7 +409,7 @@ class GeneratorScreen(ft.View):
                 self.dot_canvas,
                 nav_bar
             ], spacing=10, alignment=ft.MainAxisAlignment.CENTER),
-            width=700,
+            width=720,
             height=760,
             alignment=ft.Alignment.CENTER,
             bgcolor=ft.Colors.WHITE,
@@ -453,6 +472,7 @@ class GeneratorScreen(ft.View):
                         anchors_section,
                         seed_section,
                         ft.Divider(),
+                        calculate_btn,
                         generate_btn,
                         self.save_btn,
                         self.reset_btn,
@@ -460,8 +480,8 @@ class GeneratorScreen(ft.View):
                         self.info_text
                     ], scroll=ft.ScrollMode.AUTO,
                     spacing=10),
-                    width=360,
-                    padding=20,
+                    width=340,
+                    padding=10,
                 ),
             ], expand=True)
         ]
@@ -550,6 +570,9 @@ class GeneratorScreen(ft.View):
 
         elif is_ctrl and key == "q":
             await self.close_app(None)
+
+        elif is_ctrl and key == "c":
+            self.handle_calculate(None)
 
         elif is_ctrl and key == "g":
             self.handle_generation(None)
@@ -667,11 +690,49 @@ class GeneratorScreen(ft.View):
         self.min_dist_slider.disabled = not self.min_dist_checkbox.value
         self.min_dist_slider.update()
 
+    def handle_calculate(self, e):
+        try:
+            selected_type = self.radio_group.value
+
+            if selected_type == "range" and hasattr(self, "field_max") and self.field_max.value:
+                max_val = int(self.field_max.value)
+            elif selected_type == "fixed" and hasattr(self, "field_n") and self.field_n.value:
+                max_val = int(self.field_n.value)
+            elif selected_type == "list" and hasattr(self, "field_list_nums") and self.field_list_nums.value:
+                nums_list = [int(x.strip()) for x in self.field_list_nums.value.split(",") if x.strip()]
+                max_val = max(nums_list) if nums_list else 20
+            else:
+                max_val = 20  
+
+            s_type = self.spatial_dropdown.value
+            density_type = "numerical" if s_type == "Density_num" else "surface" if s_type == "Density_surf" else None
+            s_type_split = s_type.split("_")[0] if s_type == "Density_num" or s_type == "Density_surf" else s_type
+
+            params = self.generator.suggest_optimal_bases(
+                window_res=self.generator.default_size,
+                max_n=max_val,
+                n_anchor=int(self.anchor_n.value) if self.anchor_n.value else 0,
+                spatial_type=s_type_split,
+                size_type=self.size_dropdown.value,
+                density_type=density_type
+            )
+            base_ta, base_ch = params["base_ta"], params["base_cha"]
+
+            self.TA_settings.value = str(base_ta)
+            self.CH_settings.value = str(base_ch)
+            self.update()
+        except Exception as ex:
+            self.info_text.value = f"Error in calculation: {str(ex)}"
+            self.update()
+
     def handle_generation(self, e):
         try:
-            n_values, s_type, z_type, sd_val, min_dist_val, seed_val = (
+            n_values, s_type, density_type, z_type, sd_val, min_dist_val, seed_val = (
                 parse_and_validate_inputs(self)
             )
+
+            self.generator.base_cha = float(self.CH_settings.value)
+            self.generator.base_ta = float(self.TA_settings.value)
 
             self.generated_datasets = []
             for num in n_values:
@@ -679,6 +740,7 @@ class GeneratorScreen(ft.View):
                     num_elements=num,
                     spatial_type=s_type,
                     size_type=z_type,
+                    density_type=density_type,
                     sd_ratio=sd_val,
                     min_dist_factor=min_dist_val,
                 )
@@ -704,7 +766,7 @@ class GeneratorScreen(ft.View):
                     if seed_val is not None
                     else " (Random)"
                 )
-                self.info_text.value = f"Success{seed_info}! Generated {len(self.generated_datasets)} items. TSA: {m['TSA']}, CHA: {m['CHA']}"
+                self.info_text.value = f"Success{seed_info}! Generated {len(self.generated_datasets)} items. TSA: {m['TSA']}, CHA: {m['CHA']}, ID: {m['ID']}, TP: {m['TP']}, Density (numerical): {m['Density (numerical)']}, Density (surface): {m['Density (surface)']}, MO: {m['MO']}"
             else:
                 self.info_text.value = "Success! Generated 0 items."
             self.update()

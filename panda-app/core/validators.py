@@ -3,6 +3,8 @@ import numpy as np
 def parse_and_validate_inputs(screen):
     selected_type = screen.radio_group.value
     s_type = screen.spatial_dropdown.value
+    density_type = "numerical" if s_type == "Density_num" else "surface" if s_type == "Density_surf" else None
+    s_type = s_type.split("_")[0] if s_type == "Density_num" or s_type == "Density_surf" else s_type
     z_type = screen.size_dropdown.value
     sd_val = float(screen.sd_slider.value)
     min_dist_val = (
@@ -108,4 +110,4 @@ def parse_and_validate_inputs(screen):
             for _ in range(count):
                 n_values.append(val)
 
-    return n_values, s_type, z_type, sd_val, min_dist_val, seed_val
+    return n_values, s_type, density_type, z_type, sd_val, min_dist_val, seed_val
