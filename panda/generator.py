@@ -33,14 +33,17 @@ class PANDA:
         mean_r_anchor (float): Calculated mean radius of anchor dots.
         base_tp (float): Calculated baseline Total Perimeter.
         base_id (float): Calculated baseline Inter-item Distance.
+        base_density_num (float): Calculated baseline Density (N / CH).
+        base_density_surf (float): Calculated baseline Density (TA / CH).
+        base_occupancy (float): Calculated baseline Occupancy (CH / N).
     """
 
     def __init__(
         self,
         window: Optional[visual.Window] = None,
         n_anchor: int = 3,
-        base_ta: float = 30000.0,
-        base_cha: float = 120000.0,
+        base_ta: float | None = 30000.0,
+        base_cha: float | None = 120000.0,
         color: str = "black",
         seed: Optional[int] = None,
         default_size: Tuple[int, int] = (700, 700),
@@ -53,12 +56,16 @@ class PANDA:
         self.rng = np.random.default_rng(seed)
 
         self.n_anchor = n_anchor
-        self.base_ta = base_ta
-        self.base_cha = base_cha
+        self.base_ta = base_ta if base_ta is not None else 30000.0
+        self.base_cha = base_cha if base_cha is not None else 120000.0
 
         self.mean_r_anchor = np.sqrt((self.base_ta / self.n_anchor) / np.pi)
         self.base_tp = self.n_anchor * (2 * np.pi * self.mean_r_anchor)
         self.base_id = (0.51 * np.sqrt(self.base_cha)) + (2 * self.mean_r_anchor)
+
+        self.base_density_num = self.n_anchor / self.base_cha  
+        self.base_density_surf = self.base_ta / self.base_cha
+        self.base_occupancy = self.base_cha / self.n_anchor
 
     def _get_radii(self, num: int, target_tsa: float, sd_ratio: float = 0.0) -> np.ndarray:
         """Calculate individual dot radii matching a target Total Surface Area (TSA) and standard deviation ratio.
@@ -75,11 +82,12 @@ class PANDA:
         if sd_ratio == 0:
             areas = np.full(num, mean_area)
         else:
-            sd_area = mean_area * sd_ratio
-            areas = self.rng.normal(loc=mean_area, scale=sd_area, size=num)
-            areas = np.clip(areas, mean_area * 0.1, None)
+            sigma = sd_ratio
+            mu = np.log(mean_area) - (sigma ** 2) / 2.0
+            areas = np.random.lognormal(mean=mu, sigma=sigma, size=num)
         areas *= target_tsa / np.sum(areas)
         return np.sqrt(areas / np.pi)
+    
 
     def _get_radii_tp(self, num: int, target_tp: float, sd_ratio: float = 0.0) -> np.ndarray:
         """Calculate individual dot radii matching a target Total Perimeter (TP) and standard deviation ratio.
@@ -96,9 +104,9 @@ class PANDA:
         if sd_ratio == 0:
             perims = np.full(num, mean_perim)
         else:
-            sd_perim = mean_perim * sd_ratio
-            perims = self.rng.normal(loc=mean_perim, scale=sd_perim, size=num)
-            perims = np.clip(perims, mean_perim * 0.1, None)
+            sigma = sd_ratio
+            mu = np.log(mean_perim) - (sigma**2) / 2
+            perims = np.random.lognormal(mean=mu, sigma=sigma, size=num)            
         perims *= target_tp / np.sum(perims)
         return perims / (2 * np.pi)
 
@@ -128,17 +136,72 @@ class PANDA:
             return 0.0
         return float(np.mean(pdist(positions)))
 
-    def _resolve_condition_values(self, spatial_type: str, size_type: str) -> Tuple[float, float]:
+    def _compute_density(self, positions: np.ndarray, radii: np.ndarray, density_type: str = 'numerical') -> float:
+        """Compute the spatial density of the dot array.
+        
+        Args:
+            positions (np.ndarray): Array of shape (N, 2) with dot centers.
+            radii (np.ndarray): Array of shape (N,) with dot radii.
+            density_type (str): 'numerical' (N / CH) or 'surface' (TA / CH).
+            
+        Returns:
+            float: The calculated density value. Returns 0.0 if CH cannot be computed.
+        """
+        if len(positions) < 3:
+            return 0.0
+        ch_area = self._compute_convex_hull_area(positions)
+        if ch_area == 0:
+            return 0.0
+        if density_type == 'numerical':
+            return float(len(positions) / ch_area)
+        elif density_type == 'surface':
+            radii_np = np.asarray(radii)
+            total_area = np.sum(np.pi * (radii_np ** 2))
+            return float(total_area / ch_area)
+        else:
+            raise ValueError("Unsupported density_type. Use 'numerical' or 'surface'.")
+
+    def _compute_mean_occupancy(self, positions: np.ndarray, num_elements: int) -> float:
+        """Compute the average area allocated per element (CH / N).
+        
+        Args:
+            positions (np.ndarray): Array of shape (N, 2) with dot centers.
+            num_elements (int): Number of elements in the dot array.
+            
+        Returns:
+            float: The calculated mean occupancy value. Returns 0.0 if CH cannot be computed.
+        """
+        if num_elements < 3 or len(positions) < 3:
+            return 0.0
+            
+        ch_area = self._compute_convex_hull_area(positions)
+        if ch_area == 0:
+            return 0.0
+            
+        return float(ch_area / num_elements)
+
+    def _resolve_condition_values(self, spatial_type: str, size_type: str, density_type: str = 'numerical') -> Tuple[float, float]:
         """Retrieve target spatial and size baseline values corresponding to specified condition types.
 
         Args:
-            spatial_type (str): the spatial condition type ('CH' for Convex Hull, 'ID' for Inter-Distance)
+            spatial_type (str): the spatial condition type ('CH' for Convex Hull, 'ID' for Inter-Distance, 'Density', or 'MO' for Mean Occupancy)
             size_type (str): the size condition type ('TA' for Total Area, 'TP' for Total Perimeter)
+            density_type (str): 'numerical' (N / CH) or 'surface' (TA / CH). Defaults to 'numerical'.
 
         Returns:
             Tuple[float, float]: A tuple containing the resolved spatial value and size value for the specified condition types.
         """
-        s_val = self.base_cha if spatial_type == 'CH' else self.base_id
+        if spatial_type == 'CH':
+            s_val = self.base_cha
+        elif spatial_type == 'ID':
+            s_val = self.base_id
+        elif spatial_type == 'Density':
+            s_val = self.base_density_num if density_type == 'numerical' else self.base_density_surf
+        elif spatial_type == 'MO':
+            s_val = self.base_occupancy
+        else:
+            raise ValueError(f"Unknown spatial_type: {spatial_type}. Use 'CH', 'ID', 'Density', or 'MO'.")
+
         z_val = self.base_ta if size_type == 'TA' else self.base_tp
         return s_val, z_val
 
@@ -157,13 +220,26 @@ class PANDA:
             current_mean_r = np.sqrt((z_val / num_elements) / np.pi)
         else:
             current_mean_r = (z_val / num_elements) / (2 * np.pi)
-        return max(15.0, current_mean_r * 0.5)
+        return max(2.0, current_mean_r * 0.3)
+
+    def _update_bases(self):
+        """
+        Update the baseline parameters (Total Area, Convex Hull Area, Total Perimeter, Inter-Distance, Density, and Occupancy) based on the current number of anchors and their properties.
+        """
+        self.mean_r_anchor = np.sqrt((self.base_ta / self.n_anchor) / np.pi)
+        self.base_tp = self.n_anchor * (2 * np.pi * self.mean_r_anchor)
+        self.base_id = (0.51 * np.sqrt(self.base_cha)) + (2 * self.mean_r_anchor)
+
+        self.base_density_num = self.n_anchor / self.base_cha  
+        self.base_density_surf = self.base_ta / self.base_cha
+        self.base_occupancy = self.base_cha / self.n_anchor
 
     def generate_balanced_set(
         self,
         num_elements: int,
         spatial_type: str,
         size_type: str,
+        density_type: str = 'numerical',
         sd_ratio: float = 0.0,
         min_dist_factor: Optional[float] = None,
     ) -> Tuple[List[visual.Circle], List[float], List[List[float]]]:
@@ -171,8 +247,9 @@ class PANDA:
 
         Args:
             num_elements (int): the number of dots to generate
-            spatial_type (str): the spatial condition type ('CH' for Convex Hull, 'ID' for Inter-Distance)
+            spatial_type (str): the spatial condition type ('CH' for Convex Hull, 'ID' for Inter-Distance, 'Density', or 'MO' for Mean Occupancy)
             size_type (str): the size condition type ('TA' for Total Area, 'TP' for Total Perimeter)
+            density_type (str): 'numerical' (N / CH) or 'surface' (TA / CH). Defaults to 'numerical'.
             sd_ratio (float, optional): standard deviation ratio of the dot sizes. Defaults to 0.0.
             min_dist_factor (Optional[float], optional): the minimum distance factor between dots. Defaults to None.
 
@@ -183,13 +260,15 @@ class PANDA:
         Returns:
             Tuple[List[visual.Circle], List[float], List[List[float]]]: A tuple containing the generated dot objects, their radii, and their positions.
         """
-        if num_elements < 3 and spatial_type == 'CH':
+        if num_elements < 3 and spatial_type in ['CH', 'Density', 'MO']:
             raise ValueError(
                 "Numerosity of elements must be at least 3 for Convex Hull (CH) spatial type."
             )
 
+        self._update_bases()
+
         spatial_val, size_val = self._resolve_condition_values(
-            spatial_type, size_type
+            spatial_type, size_type, density_type
         )
 
         if min_dist_factor is None:
@@ -209,8 +288,20 @@ class PANDA:
 
         if spatial_type == 'CH':
             target_spawn_radius = np.sqrt(spatial_val / np.pi)
-        else:
+        elif spatial_type == 'ID':
             target_spawn_radius = spatial_val * 1.1
+        elif spatial_type == 'Density':
+            if density_type == 'numerical':
+                target_ch = num_elements / spatial_val
+            else:  
+                total_area = np.sum(np.pi * (radii ** 2))
+                target_ch = total_area / spatial_val  
+            target_spawn_radius = np.sqrt(target_ch / np.pi)
+        elif spatial_type == 'MO':
+            target_ch = num_elements * spatial_val
+            target_spawn_radius = np.sqrt(target_ch / np.pi)
+        else:
+            target_spawn_radius = safe_margin * 0.5
 
         target_spawn_radius = min(target_spawn_radius, safe_margin)
 
@@ -247,10 +338,32 @@ class PANDA:
 
                 if spatial_type == 'CH':
                     curr = self._compute_convex_hull_area(positions_np)
-                    scale = np.sqrt(spatial_val / curr)
-                else:
+                    scale = np.sqrt(spatial_val / curr) if curr > 0 else 1.0
+                elif spatial_type == 'ID':
                     curr = self._compute_inter_distance(positions_np)
-                    scale = spatial_val / curr
+                    scale = spatial_val / curr if curr > 0 else 1.0
+                elif spatial_type == 'Density':
+                    curr_density = self._compute_density(positions_np, radii, density_type=density_type)
+                    if curr_density > 0:
+                        if density_type == 'numerical':
+                            target_ch = num_elements / spatial_val
+                            curr_ch = num_elements / curr_density
+                        else: 
+                            total_area = np.sum(np.pi * (radii ** 2))
+                            target_ch = total_area / spatial_val
+                            curr_ch = total_area / curr_density
+                            
+                        scale = np.sqrt(target_ch / curr_ch)
+                    else:
+                        scale = 1.0
+                elif spatial_type == 'MO':
+                    curr_occupancy = self._compute_mean_occupancy(positions_np, num_elements)
+                    if curr_occupancy > 0:
+                        target_ch = num_elements * spatial_val
+                        curr_ch = num_elements * curr_occupancy
+                        scale = np.sqrt(target_ch / curr_ch)
+                    else:
+                        scale = 1.0
 
                 final_positions = positions_np * scale
                 
@@ -299,7 +412,8 @@ class PANDA:
         cha = self._compute_convex_hull_area(positions_np)
         id_val = self._compute_inter_distance(positions_np)
 
-        density = tsa / cha if cha > 0 else 0.0
+        density_num = self._compute_density(positions_np, radii, density_type='numerical') if cha > 0 else 0.0
+        density_surf = self._compute_density(positions_np, radii, density_type='surface') if cha > 0 else 0.0
         additive_area = np.sum(2 * radii_np)
         mean_occupancy = cha / num_elements if num_elements > 0 else 0.0
 
@@ -309,7 +423,8 @@ class PANDA:
             'TP': round(tp, 4),
             'CHA': round(cha, 4),
             'ID': round(id_val, 4),
-            'Density': round(density, 6),
+            'Density (numerical)': round(density_num, 6),
+            'Density (surface)': round(density_surf, 6),
             'AA': round(additive_area, 4),
             'MO': round(mean_occupancy, 4),
         }
@@ -326,18 +441,20 @@ class PANDA:
         min_dist_factor: Optional[float] = None,
         save_results: bool = True,
         pause_time: float = 0.0,
+        density_type: str = 'numerical',
     ) -> List[visual.Circle]:
         """Generate, render, and display a dot array in PsychoPy, optionally capturing and saving the frame.
 
         Args:
             num_elements (int): the number of dots to generate
-            spatial_type (str): the spatial condition type ('CH' for Convex Hull, 'ID' for Inter-Distance)
+            spatial_type (str): the spatial condition type ('CH' for Convex Hull, 'ID' for Inter-Distance, 'Density', or 'MO' for Mean Occupancy)
             size_type (str): the size condition type ('TA' for Total Area, 'TP' for Total Perimeter)
             output_filepath (Optional[str], optional): the path to save the generated image. Defaults to None.
             sd_ratio (float, optional): standard deviation ratio of the dot sizes. Defaults to 0.0.
             min_dist_factor (Optional[float], optional): the minimum distance factor between dots. Defaults to None.
             save_results (bool, optional): whether to save the generated results. Defaults to True.
             pause_time (float, optional): the time to pause between frames. Defaults to 0.0.
+            density_type (str): 'numerical' (N / CH) or 'surface' (TA / CH). Defaults to 'numerical'.
 
         Returns:
             List[visual.Circle]: the list of generated dot objects
@@ -348,6 +465,7 @@ class PANDA:
             num_elements=num_elements,
             spatial_type=spatial_type,
             size_type=size_type,
+            density_type=density_type,
             sd_ratio=sd_ratio,
             min_dist_factor=min_dist_factor,
         )
@@ -386,3 +504,64 @@ class PANDA:
         """
         df = self.get_dataframe()
         df.to_csv(filename, index=False)
+
+    @staticmethod
+    def suggest_optimal_bases(
+        window_res: tuple | list = (700, 700),
+        max_n: int = 20,
+        n_anchor: int = 3,
+        spatial_type: str = 'CH',
+        size_type: str = 'TA',
+        density_type: str = 'numerical'
+    ) -> dict:
+        """
+        Experimental calculator: suggests the optimal number of dots for a given window resolution, maximum number of dots, number of anchor dots, spatial condition type, size condition type, and density type.
+
+        Args:
+            window_res (tuple | list, optional): The window resolution. Defaults to (700, 700).
+            max_n (int, optional): The maximum number of dots. Defaults to 20.
+            n_anchor (int, optional): The number of anchor dots. Defaults to 3.
+            spatial_type (str, optional): The spatial condition type. Defaults to 'CH'.
+            size_type (str, optional): The size condition type. Defaults to 'TA'.
+            density_type (str, optional): The density type. Defaults to 'numerical'.
+
+        Returns:
+            dict: A dictionary containing the suggested optimal number of dots for each condition type.
+        """
+        half_win = min(window_res) / 2.0
+        safe_radius = half_win - 40.0  
+        max_safe_ch = np.pi * (safe_radius ** 2)  
+
+        warning_msg = None
+
+        if spatial_type == 'ID':
+            recommended_cha = min(120000.0, max_safe_ch * 0.8)
+        elif spatial_type == 'CH':
+            recommended_cha = min(120000.0, max_safe_ch * 0.7)
+        elif spatial_type in ['Occupancy', 'Density']:
+            if spatial_type == 'Density' and density_type == 'surface':
+                recommended_cha = min(120000.0, max_safe_ch * 0.7)
+            else:
+                max_allowed_base_cha = max_safe_ch * (n_anchor / max_n)
+                recommended_cha = max_allowed_base_cha * 0.5
+                max_sensible_cha = 60000.0 
+                if recommended_cha > max_sensible_cha:
+                    recommended_cha = max_sensible_cha
+                if recommended_cha < 3000.0:
+                    recommended_cha = 3000.0
+                    warning_msg = "Warning: The recommended base_cha is too small."
+        else:
+            recommended_cha = 50000.0
+
+        if size_type == 'TA':
+            recommended_size = recommended_cha * 0.20
+        else: 
+            recommended_size = 30000.0 if spatial_type == 'ID' else (np.sqrt(recommended_cha) * 50.0)
+
+        return {
+            "base_cha": round(float(recommended_cha), 2),
+            "base_ta": round(float(recommended_size), 2),
+            "n_anchor": n_anchor,
+            "max_safe_window_radius": round(float(safe_radius), 2),
+            "warning": warning_msg
+        }
