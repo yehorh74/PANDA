@@ -159,8 +159,8 @@ def save_current_stimulus_png(screen, folder_path: str):
         center_x = img_size / 2
         center_y = img_size / 2
 
-        bg_color = "white" if screen.generator.color == 'black' else "black"
-        dot_color = "black" if screen.generator.color == 'black' else "white"
+        bg_color = ft.Colors.WHITE if screen.generator.color == ft.Colors.BLACK else ft.Colors.BLACK
+        dot_color = ft.Colors.BLACK if screen.generator.color == ft.Colors.WHITE else ft.Colors.WHITE
 
         spatial_type = screen.spatial_dropdown.value
         size_type = screen.size_dropdown.value
@@ -214,8 +214,8 @@ def save_all(screen, folder_path: str):
         center_x = img_size / 2
         center_y = img_size / 2
 
-        bg_color = "white" if screen.generator.color == 'black' else "black"
-        dot_color = "black" if screen.generator.color == 'black' else "white"
+        bg_color = ft.Colors.WHITE if screen.generator.color == ft.Colors.BLACK else ft.Colors.BLACK
+        dot_color = ft.Colors.BLACK if screen.generator.color == ft.Colors.WHITE else ft.Colors.WHITE
 
         spatial_type = screen.spatial_dropdown.value
         size_type = screen.size_dropdown.value
@@ -272,7 +272,7 @@ def reset_all(screen, e):
     screen.color_dropdown.value = "black_on_white"
     
     screen.canvas_container.bgcolor = ft.Colors.WHITE
-    screen.generator.color = 'black'
+    screen.generator.color = ft.Colors.BLACK
     screen.prev_btn.icon_color = ft.Colors.BLACK
     screen.next_btn.icon_color = ft.Colors.BLACK
     screen.index_label.color = ft.Colors.BLACK

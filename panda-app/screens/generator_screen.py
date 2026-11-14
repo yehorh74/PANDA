@@ -2,6 +2,7 @@ import flet as ft
 import flet.canvas as cv
 import tkinter as tk
 from tkinter import filedialog
+from flet_color_pickers import ColorLabelType, ColorPicker, PaletteType
 
 from panda.generator import PANDA  
 
@@ -220,8 +221,9 @@ class GeneratorScreen(ft.View):
         ], spacing=5)
 
         self.color_dropdown = ft.Dropdown(
-            value="black_on_white",
+            value="none",
             options=[
+                ft.dropdown.Option("none", "None"),
                 ft.dropdown.Option("black_on_white", "Black on White"),
                 ft.dropdown.Option("white_on_black", "White on Black"),
             ],
@@ -239,7 +241,61 @@ class GeneratorScreen(ft.View):
                     tooltip="Determines the color contrast scheme of the stimuli.\n• Black on White – black elements on a white background\n• White on Black – white elements on a black background"
                 )
             ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=300),
-            self.color_dropdown
+            self.color_dropdown,
+        ], spacing=5)
+
+        self.background_color = ColorPicker(
+            color="#000000",
+            color_history=[
+            ],
+            on_color_change=self.on_back_color_change,
+            palette_type=PaletteType.HSV,
+            on_history_change=self.on_back_history_change,
+            label_types=[
+                ColorLabelType.HEX,
+                ColorLabelType.RGB,
+            ],
+            picker_area_border_radius=ft.BorderRadius.all(20),
+        )
+
+        background_color_section = ft.Column([
+            ft.Row([
+                ft.Text("Background color", size=14, weight=ft.FontWeight.W_500),
+                ft.Icon(
+                    icon=ft.Icons.HELP_OUTLINE,
+                    size=16,
+                    color=ft.Colors.GREY_500,
+                    tooltip="The background color of the canvas."
+                )
+            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=300),
+            self.background_color
+        ], spacing=5)
+
+        self.dot_color = ColorPicker(
+            color="#000000",
+            color_history=[
+            ],
+            on_color_change=self.on_dot_color_change,
+            palette_type=PaletteType.HSV,
+            on_history_change=self.on_dot_history_change,
+            label_types=[
+                ColorLabelType.HEX,
+                ColorLabelType.RGB,
+            ],
+            picker_area_border_radius=ft.BorderRadius.all(20),
+        )
+
+        dot_color_section = ft.Column([
+            ft.Row([
+                ft.Text("Dot color", size=14, weight=ft.FontWeight.W_500),
+                ft.Icon(
+                    icon=ft.Icons.HELP_OUTLINE,
+                    size=16,
+                    color=ft.Colors.GREY_500,
+                    tooltip="The color of the dots."
+                )
+            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=300),
+            self.dot_color
         ], spacing=5)
 
         self.sd_text = ft.Text("Size variability", size=14, weight=ft.FontWeight.W_500)
@@ -461,6 +517,8 @@ class GeneratorScreen(ft.View):
                         spatial_section,
                         size_section,
                         color_section,
+                        background_color_section,
+                        dot_color_section,
                         sd_section,
                         self.sd_slider,
                         min_dist_section,
@@ -659,24 +717,79 @@ class GeneratorScreen(ft.View):
             save_all(self, folder_path)
 
     def handle_color_change(self, e):
+        total = len(self.generated_datasets)
         selected_color = self.color_dropdown.value
+        
         if selected_color == "black_on_white":
             self.canvas_container.bgcolor = ft.Colors.WHITE
-            self.generator.color = 'black'
-            self.prev_btn.icon_color = ft.Colors.BLACK
-            self.next_btn.icon_color = ft.Colors.BLACK
-            self.index_label.color = ft.Colors.BLACK
-            self.delete_btn.icon_color = ft.Colors.BLACK
-            self.save_png_btn.icon_color = ft.Colors.BLACK
+            self.generator.color = ft.Colors.BLACK
+            self.update_dots_color(self.generator.color)
+            self.prev_btn.icon_color = ft.Colors.GREY_900
+            self.next_btn.icon_color = ft.Colors.GREY_900
+            self.index_label.color = ft.Colors.GREY_900
+            self.delete_btn.icon_color = ft.Colors.GREY_900
+            self.save_png_btn.icon_color = ft.Colors.GREY_900
         elif selected_color == "white_on_black":
             self.canvas_container.bgcolor = ft.Colors.BLACK
-            self.generator.color = 'white'
-            self.prev_btn.icon_color = ft.Colors.WHITE
-            self.next_btn.icon_color = ft.Colors.WHITE
-            self.index_label.color = ft.Colors.WHITE
-            self.delete_btn.icon_color = ft.Colors.WHITE
-            self.save_png_btn.icon_color = ft.Colors.WHITE
+            self.generator.color = ft.Colors.WHITE
+            self.update_dots_color(self.generator.color)
+            self.prev_btn.icon_color = ft.Colors.GREY_900
+            self.next_btn.icon_color = ft.Colors.GREY_900
+            self.index_label.color = ft.Colors.GREY_900
+            self.delete_btn.icon_color = ft.Colors.GREY_900
+            self.save_png_btn.icon_color = ft.Colors.GREY_900
         self.canvas_container.update()
+
+    def on_back_color_change(self, e: ft.ControlEvent):
+        selected_color = e.data or getattr(e.control, "color", None)
+    
+        if selected_color:
+            self.canvas_container.bgcolor = selected_color
+            self.prev_btn.icon_color = ft.Colors.GREY_900 
+            self.next_btn.icon_color = ft.Colors.GREY_900 
+            self.index_label.color = ft.Colors.GREY_900 
+            self.delete_btn.icon_color = ft.Colors.GREY_900 
+            self.save_png_btn.icon_color = ft.Colors.GREY_900 
+            
+            self.canvas_container.update()
+            self.prev_btn.update()
+            self.next_btn.update()
+            self.index_label.update()
+            self.delete_btn.update()
+            self.save_png_btn.update()
+        #print(f"color: {e.data}")
+
+    def on_back_history_change(self, e: ft.ControlEvent):
+        if hasattr(e.control, "color_history"):
+            new_history = e.control.color_history
+            self.background_color.color_history = new_history
+        #print(f"history: {e.data}")
+
+    def on_dot_color_change(self, e: ft.ControlEvent):
+        selected_color = e.data or getattr(e.control, "color", None)
+    
+        if selected_color:
+            self.generator.color = selected_color
+            self.prev_btn.icon_color = ft.Colors.GREY_900 
+            self.next_btn.icon_color = ft.Colors.GREY_900 
+            self.index_label.color = ft.Colors.GREY_900 
+            self.delete_btn.icon_color = ft.Colors.GREY_900 
+            self.save_png_btn.icon_color = ft.Colors.GREY_900 
+
+            self.update_dots_color(self.generator.color)
+            self.canvas_container.update()
+            self.prev_btn.update()
+            self.next_btn.update()
+            self.index_label.update()
+            self.delete_btn.update()
+            self.save_png_btn.update()
+        #print(f"color: {e.data}")
+
+    def on_dot_history_change(self, e: ft.ControlEvent):
+        if hasattr(e.control, "color_history"):
+            new_history = e.control.color_history
+            self.background_color.color_history = new_history
+        #print(f"history: {e.data}")
 
     def sd_changed(self, e):
         self.sd_slider.label = f"SD: {self.sd_slider.value:.2f}"
@@ -780,7 +893,7 @@ class GeneratorScreen(ft.View):
             self.update()
 
     def update_view_state(self):
-        shapes = []
+        self.shapes = []
         total = len(self.generated_datasets)
 
         if total == 0:
@@ -822,20 +935,34 @@ class GeneratorScreen(ft.View):
                 y = center_y - (pos[1] * scale)  
                 scaled_r = max(2.0, r * scale)   
 
-                shapes.append(
+                self.shapes.append(
                     cv.Circle(
                         x=x,
                         y=y,
                         radius=scaled_r,
                         paint=ft.Paint(
-                            color=ft.Colors.BLACK if self.generator.color == 'black' else ft.Colors.WHITE,
+                            color=self.generator.color,
                             style=ft.PaintingStyle.FILL
                         )
                     )
                 )
 
-        self.dot_canvas.shapes = shapes
+        self.dot_canvas.shapes = self.shapes
         self.dot_canvas.update()
+
+    def update_dots_color(self, new_color):
+        self.generator.color = new_color
+        shapes = getattr(self, "shapes", None)
+    
+        if not shapes:
+            return 
+            
+        for shape in shapes:
+            if isinstance(shape, cv.Circle):
+                shape.paint.color = new_color
+                
+        if hasattr(self, "dot_canvas") and self.dot_canvas:
+            self.dot_canvas.update()
 
     def prev_image(self, e):
         if self.current_index > 0:

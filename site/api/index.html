@@ -421,6 +421,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#panda.generator.PANDA.suggest_optimal_bases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        suggest_optimal_bases
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -532,6 +543,17 @@
     <span class="md-ellipsis">
       
         save_csv
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#panda.generator.PANDA.suggest_optimal_bases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        suggest_optimal_bases
       
     </span>
   </a>
@@ -814,6 +836,39 @@ parameterization of multi-element dot arrays.</p>
             <td>
               <div class="doc-md-description">
                 <p>Calculated baseline Inter-item Distance.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="panda.generator.PANDA.base_density_num">base_density_num</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Calculated baseline Density (N / CH).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="panda.generator.PANDA.base_density_surf">base_density_surf</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Calculated baseline Density (TA / CH).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="panda.generator.PANDA.base_occupancy">base_occupancy</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Calculated baseline Occupancy (CH / N).</p>
               </div>
             </td>
           </tr>
@@ -1206,7 +1261,186 @@ parameterization of multi-element dot arrays.</p>
 <span class="normal">385</span>
 <span class="normal">386</span>
 <span class="normal">387</span>
-<span class="normal">388</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">PANDA</span><span class="p">:</span>
+<span class="normal">388</span>
+<span class="normal">389</span>
+<span class="normal">390</span>
+<span class="normal">391</span>
+<span class="normal">392</span>
+<span class="normal">393</span>
+<span class="normal">394</span>
+<span class="normal">395</span>
+<span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span>
+<span class="normal">399</span>
+<span class="normal">400</span>
+<span class="normal">401</span>
+<span class="normal">402</span>
+<span class="normal">403</span>
+<span class="normal">404</span>
+<span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
+<span class="normal">409</span>
+<span class="normal">410</span>
+<span class="normal">411</span>
+<span class="normal">412</span>
+<span class="normal">413</span>
+<span class="normal">414</span>
+<span class="normal">415</span>
+<span class="normal">416</span>
+<span class="normal">417</span>
+<span class="normal">418</span>
+<span class="normal">419</span>
+<span class="normal">420</span>
+<span class="normal">421</span>
+<span class="normal">422</span>
+<span class="normal">423</span>
+<span class="normal">424</span>
+<span class="normal">425</span>
+<span class="normal">426</span>
+<span class="normal">427</span>
+<span class="normal">428</span>
+<span class="normal">429</span>
+<span class="normal">430</span>
+<span class="normal">431</span>
+<span class="normal">432</span>
+<span class="normal">433</span>
+<span class="normal">434</span>
+<span class="normal">435</span>
+<span class="normal">436</span>
+<span class="normal">437</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span>
+<span class="normal">448</span>
+<span class="normal">449</span>
+<span class="normal">450</span>
+<span class="normal">451</span>
+<span class="normal">452</span>
+<span class="normal">453</span>
+<span class="normal">454</span>
+<span class="normal">455</span>
+<span class="normal">456</span>
+<span class="normal">457</span>
+<span class="normal">458</span>
+<span class="normal">459</span>
+<span class="normal">460</span>
+<span class="normal">461</span>
+<span class="normal">462</span>
+<span class="normal">463</span>
+<span class="normal">464</span>
+<span class="normal">465</span>
+<span class="normal">466</span>
+<span class="normal">467</span>
+<span class="normal">468</span>
+<span class="normal">469</span>
+<span class="normal">470</span>
+<span class="normal">471</span>
+<span class="normal">472</span>
+<span class="normal">473</span>
+<span class="normal">474</span>
+<span class="normal">475</span>
+<span class="normal">476</span>
+<span class="normal">477</span>
+<span class="normal">478</span>
+<span class="normal">479</span>
+<span class="normal">480</span>
+<span class="normal">481</span>
+<span class="normal">482</span>
+<span class="normal">483</span>
+<span class="normal">484</span>
+<span class="normal">485</span>
+<span class="normal">486</span>
+<span class="normal">487</span>
+<span class="normal">488</span>
+<span class="normal">489</span>
+<span class="normal">490</span>
+<span class="normal">491</span>
+<span class="normal">492</span>
+<span class="normal">493</span>
+<span class="normal">494</span>
+<span class="normal">495</span>
+<span class="normal">496</span>
+<span class="normal">497</span>
+<span class="normal">498</span>
+<span class="normal">499</span>
+<span class="normal">500</span>
+<span class="normal">501</span>
+<span class="normal">502</span>
+<span class="normal">503</span>
+<span class="normal">504</span>
+<span class="normal">505</span>
+<span class="normal">506</span>
+<span class="normal">507</span>
+<span class="normal">508</span>
+<span class="normal">509</span>
+<span class="normal">510</span>
+<span class="normal">511</span>
+<span class="normal">512</span>
+<span class="normal">513</span>
+<span class="normal">514</span>
+<span class="normal">515</span>
+<span class="normal">516</span>
+<span class="normal">517</span>
+<span class="normal">518</span>
+<span class="normal">519</span>
+<span class="normal">520</span>
+<span class="normal">521</span>
+<span class="normal">522</span>
+<span class="normal">523</span>
+<span class="normal">524</span>
+<span class="normal">525</span>
+<span class="normal">526</span>
+<span class="normal">527</span>
+<span class="normal">528</span>
+<span class="normal">529</span>
+<span class="normal">530</span>
+<span class="normal">531</span>
+<span class="normal">532</span>
+<span class="normal">533</span>
+<span class="normal">534</span>
+<span class="normal">535</span>
+<span class="normal">536</span>
+<span class="normal">537</span>
+<span class="normal">538</span>
+<span class="normal">539</span>
+<span class="normal">540</span>
+<span class="normal">541</span>
+<span class="normal">542</span>
+<span class="normal">543</span>
+<span class="normal">544</span>
+<span class="normal">545</span>
+<span class="normal">546</span>
+<span class="normal">547</span>
+<span class="normal">548</span>
+<span class="normal">549</span>
+<span class="normal">550</span>
+<span class="normal">551</span>
+<span class="normal">552</span>
+<span class="normal">553</span>
+<span class="normal">554</span>
+<span class="normal">555</span>
+<span class="normal">556</span>
+<span class="normal">557</span>
+<span class="normal">558</span>
+<span class="normal">559</span>
+<span class="normal">560</span>
+<span class="normal">561</span>
+<span class="normal">562</span>
+<span class="normal">563</span>
+<span class="normal">564</span>
+<span class="normal">565</span>
+<span class="normal">566</span>
+<span class="normal">567</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">PANDA</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;PANDA (Python Automating Numerical Dot Algorithm).</span>
 
 <span class="sd">    An open algorithm dedicated to the precise generation and controlled</span>
@@ -1231,14 +1465,17 @@ parameterization of multi-element dot arrays.</p>
 <span class="sd">        mean_r_anchor (float): Calculated mean radius of anchor dots.</span>
 <span class="sd">        base_tp (float): Calculated baseline Total Perimeter.</span>
 <span class="sd">        base_id (float): Calculated baseline Inter-item Distance.</span>
+<span class="sd">        base_density_num (float): Calculated baseline Density (N / CH).</span>
+<span class="sd">        base_density_surf (float): Calculated baseline Density (TA / CH).</span>
+<span class="sd">        base_occupancy (float): Calculated baseline Occupancy (CH / N).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">window</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">visual</span><span class="o">.</span><span class="n">Window</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">n_anchor</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
-        <span class="n">base_ta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">30000.0</span><span class="p">,</span>
-        <span class="n">base_cha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">120000.0</span><span class="p">,</span>
+        <span class="n">base_ta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mf">30000.0</span><span class="p">,</span>
+        <span class="n">base_cha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mf">120000.0</span><span class="p">,</span>
         <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
         <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">default_size</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">),</span>
@@ -1251,12 +1488,16 @@ parameterization of multi-element dot arrays.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">n_anchor</span> <span class="o">=</span> <span class="n">n_anchor</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">base_ta</span> <span class="o">=</span> <span class="n">base_ta</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">base_cha</span> <span class="o">=</span> <span class="n">base_cha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_ta</span> <span class="o">=</span> <span class="n">base_ta</span> <span class="k">if</span> <span class="n">base_ta</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mf">30000.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_cha</span> <span class="o">=</span> <span class="n">base_cha</span> <span class="k">if</span> <span class="n">base_cha</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mf">120000.0</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">mean_r_anchor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">base_ta</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_anchor</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_tp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_anchor</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean_r_anchor</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_id</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.51</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_cha</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean_r_anchor</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_density_num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_anchor</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cha</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_density_surf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_ta</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_occupancy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cha</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_anchor</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_radii</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">target_tsa</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sd_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate individual dot radii matching a target Total Surface Area (TSA) and standard deviation ratio.</span>
@@ -1273,11 +1514,12 @@ parameterization of multi-element dot arrays.</p>
         <span class="k">if</span> <span class="n">sd_ratio</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">areas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">mean_area</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">sd_area</span> <span class="o">=</span> <span class="n">mean_area</span> <span class="o">*</span> <span class="n">sd_ratio</span>
-            <span class="n">areas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">mean_area</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sd_area</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">num</span><span class="p">)</span>
-            <span class="n">areas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">areas</span><span class="p">,</span> <span class="n">mean_area</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">sigma</span> <span class="o">=</span> <span class="n">sd_ratio</span>
+            <span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">mean_area</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">sigma</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+            <span class="n">areas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">num</span><span class="p">)</span>
         <span class="n">areas</span> <span class="o">*=</span> <span class="n">target_tsa</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">areas</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">areas</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_radii_tp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">target_tp</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sd_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate individual dot radii matching a target Total Perimeter (TP) and standard deviation ratio.</span>
@@ -1294,9 +1536,9 @@ parameterization of multi-element dot arrays.</p>
         <span class="k">if</span> <span class="n">sd_ratio</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">perims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">mean_perim</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">sd_perim</span> <span class="o">=</span> <span class="n">mean_perim</span> <span class="o">*</span> <span class="n">sd_ratio</span>
-            <span class="n">perims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">mean_perim</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sd_perim</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">num</span><span class="p">)</span>
-            <span class="n">perims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">perims</span><span class="p">,</span> <span class="n">mean_perim</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">sigma</span> <span class="o">=</span> <span class="n">sd_ratio</span>
+            <span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">mean_perim</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="n">perims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">num</span><span class="p">)</span>            
         <span class="n">perims</span> <span class="o">*=</span> <span class="n">target_tp</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">perims</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">perims</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
 
@@ -1326,17 +1568,72 @@ parameterization of multi-element dot arrays.</p>
             <span class="k">return</span> <span class="mf">0.0</span>
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">pdist</span><span class="p">(</span><span class="n">positions</span><span class="p">)))</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_resolve_condition_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spatial_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">size_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">positions</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">radii</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">density_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;numerical&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the spatial density of the dot array.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            positions (np.ndarray): Array of shape (N, 2) with dot centers.</span>
+<span class="sd">            radii (np.ndarray): Array of shape (N,) with dot radii.</span>
+<span class="sd">            density_type (str): &#39;numerical&#39; (N / CH) or &#39;surface&#39; (TA / CH).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: The calculated density value. Returns 0.0 if CH cannot be computed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+        <span class="n">ch_area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_convex_hull_area</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ch_area</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+        <span class="k">if</span> <span class="n">density_type</span> <span class="o">==</span> <span class="s1">&#39;numerical&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span> <span class="o">/</span> <span class="n">ch_area</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">density_type</span> <span class="o">==</span> <span class="s1">&#39;surface&#39;</span><span class="p">:</span>
+            <span class="n">radii_np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">radii</span><span class="p">)</span>
+            <span class="n">total_area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">radii_np</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">total_area</span> <span class="o">/</span> <span class="n">ch_area</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unsupported density_type. Use &#39;numerical&#39; or &#39;surface&#39;.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_mean_occupancy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">positions</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">num_elements</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the average area allocated per element (CH / N).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            positions (np.ndarray): Array of shape (N, 2) with dot centers.</span>
+<span class="sd">            num_elements (int): Number of elements in the dot array.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: The calculated mean occupancy value. Returns 0.0 if CH cannot be computed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">num_elements</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+
+        <span class="n">ch_area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_convex_hull_area</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ch_area</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">ch_area</span> <span class="o">/</span> <span class="n">num_elements</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_resolve_condition_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spatial_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">size_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">density_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;numerical&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve target spatial and size baseline values corresponding to specified condition types.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            spatial_type (str): the spatial condition type (&#39;CH&#39; for Convex Hull, &#39;ID&#39; for Inter-Distance)</span>
+<span class="sd">            spatial_type (str): the spatial condition type (&#39;CH&#39; for Convex Hull, &#39;ID&#39; for Inter-Distance, &#39;Density&#39;, or &#39;MO&#39; for Mean Occupancy)</span>
 <span class="sd">            size_type (str): the size condition type (&#39;TA&#39; for Total Area, &#39;TP&#39; for Total Perimeter)</span>
+<span class="sd">            density_type (str): &#39;numerical&#39; (N / CH) or &#39;surface&#39; (TA / CH). Defaults to &#39;numerical&#39;.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Tuple[float, float]: A tuple containing the resolved spatial value and size value for the specified condition types.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">s_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cha</span> <span class="k">if</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;CH&#39;</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_id</span>
+        <span class="k">if</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;CH&#39;</span><span class="p">:</span>
+            <span class="n">s_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cha</span>
+        <span class="k">elif</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;ID&#39;</span><span class="p">:</span>
+            <span class="n">s_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_id</span>
+        <span class="k">elif</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;Density&#39;</span><span class="p">:</span>
+            <span class="n">s_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_density_num</span> <span class="k">if</span> <span class="n">density_type</span> <span class="o">==</span> <span class="s1">&#39;numerical&#39;</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_density_surf</span>
+        <span class="k">elif</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;MO&#39;</span><span class="p">:</span>
+            <span class="n">s_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_occupancy</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown spatial_type: </span><span class="si">{</span><span class="n">spatial_type</span><span class="si">}</span><span class="s2">. Use &#39;CH&#39;, &#39;ID&#39;, &#39;Density&#39;, or &#39;MO&#39;.&quot;</span><span class="p">)</span>
+
         <span class="n">z_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_ta</span> <span class="k">if</span> <span class="n">size_type</span> <span class="o">==</span> <span class="s1">&#39;TA&#39;</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_tp</span>
         <span class="k">return</span> <span class="n">s_val</span><span class="p">,</span> <span class="n">z_val</span>
 
@@ -1355,13 +1652,26 @@ parameterization of multi-element dot arrays.</p>
             <span class="n">current_mean_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">z_val</span> <span class="o">/</span> <span class="n">num_elements</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">current_mean_r</span> <span class="o">=</span> <span class="p">(</span><span class="n">z_val</span> <span class="o">/</span> <span class="n">num_elements</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mf">15.0</span><span class="p">,</span> <span class="n">current_mean_r</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">current_mean_r</span> <span class="o">*</span> <span class="mf">0.3</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_bases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the baseline parameters (Total Area, Convex Hull Area, Total Perimeter, Inter-Distance, Density, and Occupancy) based on the current number of anchors and their properties.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean_r_anchor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">base_ta</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_anchor</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_tp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_anchor</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean_r_anchor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_id</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.51</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_cha</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean_r_anchor</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_density_num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_anchor</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cha</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_density_surf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_ta</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_occupancy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cha</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_anchor</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_balanced_set</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">num_elements</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">spatial_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">size_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">density_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;numerical&#39;</span><span class="p">,</span>
         <span class="n">sd_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">min_dist_factor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">visual</span><span class="o">.</span><span class="n">Circle</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
@@ -1369,8 +1679,9 @@ parameterization of multi-element dot arrays.</p>
 
 <span class="sd">        Args:</span>
 <span class="sd">            num_elements (int): the number of dots to generate</span>
-<span class="sd">            spatial_type (str): the spatial condition type (&#39;CH&#39; for Convex Hull, &#39;ID&#39; for Inter-Distance)</span>
+<span class="sd">            spatial_type (str): the spatial condition type (&#39;CH&#39; for Convex Hull, &#39;ID&#39; for Inter-Distance, &#39;Density&#39;, or &#39;MO&#39; for Mean Occupancy)</span>
 <span class="sd">            size_type (str): the size condition type (&#39;TA&#39; for Total Area, &#39;TP&#39; for Total Perimeter)</span>
+<span class="sd">            density_type (str): &#39;numerical&#39; (N / CH) or &#39;surface&#39; (TA / CH). Defaults to &#39;numerical&#39;.</span>
 <span class="sd">            sd_ratio (float, optional): standard deviation ratio of the dot sizes. Defaults to 0.0.</span>
 <span class="sd">            min_dist_factor (Optional[float], optional): the minimum distance factor between dots. Defaults to None.</span>
 
@@ -1381,13 +1692,15 @@ parameterization of multi-element dot arrays.</p>
 <span class="sd">        Returns:</span>
 <span class="sd">            Tuple[List[visual.Circle], List[float], List[List[float]]]: A tuple containing the generated dot objects, their radii, and their positions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">num_elements</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;CH&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">num_elements</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">spatial_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;CH&#39;</span><span class="p">,</span> <span class="s1">&#39;Density&#39;</span><span class="p">,</span> <span class="s1">&#39;MO&#39;</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;Numerosity of elements must be at least 3 for Convex Hull (CH) spatial type.&quot;</span>
             <span class="p">)</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_bases</span><span class="p">()</span>
+
         <span class="n">spatial_val</span><span class="p">,</span> <span class="n">size_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_condition_values</span><span class="p">(</span>
-            <span class="n">spatial_type</span><span class="p">,</span> <span class="n">size_type</span>
+            <span class="n">spatial_type</span><span class="p">,</span> <span class="n">size_type</span><span class="p">,</span> <span class="n">density_type</span>
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">min_dist_factor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1407,8 +1720,20 @@ parameterization of multi-element dot arrays.</p>
 
         <span class="k">if</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;CH&#39;</span><span class="p">:</span>
             <span class="n">target_spawn_radius</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">spatial_val</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;ID&#39;</span><span class="p">:</span>
             <span class="n">target_spawn_radius</span> <span class="o">=</span> <span class="n">spatial_val</span> <span class="o">*</span> <span class="mf">1.1</span>
+        <span class="k">elif</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;Density&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">density_type</span> <span class="o">==</span> <span class="s1">&#39;numerical&#39;</span><span class="p">:</span>
+                <span class="n">target_ch</span> <span class="o">=</span> <span class="n">num_elements</span> <span class="o">/</span> <span class="n">spatial_val</span>
+            <span class="k">else</span><span class="p">:</span>  
+                <span class="n">total_area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">radii</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+                <span class="n">target_ch</span> <span class="o">=</span> <span class="n">total_area</span> <span class="o">/</span> <span class="n">spatial_val</span>  
+            <span class="n">target_spawn_radius</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">target_ch</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;MO&#39;</span><span class="p">:</span>
+            <span class="n">target_ch</span> <span class="o">=</span> <span class="n">num_elements</span> <span class="o">*</span> <span class="n">spatial_val</span>
+            <span class="n">target_spawn_radius</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">target_ch</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">target_spawn_radius</span> <span class="o">=</span> <span class="n">safe_margin</span> <span class="o">*</span> <span class="mf">0.5</span>
 
         <span class="n">target_spawn_radius</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">target_spawn_radius</span><span class="p">,</span> <span class="n">safe_margin</span><span class="p">)</span>
 
@@ -1445,10 +1770,32 @@ parameterization of multi-element dot arrays.</p>
 
                 <span class="k">if</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;CH&#39;</span><span class="p">:</span>
                     <span class="n">curr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_convex_hull_area</span><span class="p">(</span><span class="n">positions_np</span><span class="p">)</span>
-                    <span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">spatial_val</span> <span class="o">/</span> <span class="n">curr</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">spatial_val</span> <span class="o">/</span> <span class="n">curr</span><span class="p">)</span> <span class="k">if</span> <span class="n">curr</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">1.0</span>
+                <span class="k">elif</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;ID&#39;</span><span class="p">:</span>
                     <span class="n">curr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_inter_distance</span><span class="p">(</span><span class="n">positions_np</span><span class="p">)</span>
-                    <span class="n">scale</span> <span class="o">=</span> <span class="n">spatial_val</span> <span class="o">/</span> <span class="n">curr</span>
+                    <span class="n">scale</span> <span class="o">=</span> <span class="n">spatial_val</span> <span class="o">/</span> <span class="n">curr</span> <span class="k">if</span> <span class="n">curr</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">1.0</span>
+                <span class="k">elif</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;Density&#39;</span><span class="p">:</span>
+                    <span class="n">curr_density</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_density</span><span class="p">(</span><span class="n">positions_np</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">density_type</span><span class="o">=</span><span class="n">density_type</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">curr_density</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">density_type</span> <span class="o">==</span> <span class="s1">&#39;numerical&#39;</span><span class="p">:</span>
+                            <span class="n">target_ch</span> <span class="o">=</span> <span class="n">num_elements</span> <span class="o">/</span> <span class="n">spatial_val</span>
+                            <span class="n">curr_ch</span> <span class="o">=</span> <span class="n">num_elements</span> <span class="o">/</span> <span class="n">curr_density</span>
+                        <span class="k">else</span><span class="p">:</span> 
+                            <span class="n">total_area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">radii</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+                            <span class="n">target_ch</span> <span class="o">=</span> <span class="n">total_area</span> <span class="o">/</span> <span class="n">spatial_val</span>
+                            <span class="n">curr_ch</span> <span class="o">=</span> <span class="n">total_area</span> <span class="o">/</span> <span class="n">curr_density</span>
+
+                        <span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">target_ch</span> <span class="o">/</span> <span class="n">curr_ch</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span>
+                <span class="k">elif</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;MO&#39;</span><span class="p">:</span>
+                    <span class="n">curr_occupancy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_mean_occupancy</span><span class="p">(</span><span class="n">positions_np</span><span class="p">,</span> <span class="n">num_elements</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">curr_occupancy</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">target_ch</span> <span class="o">=</span> <span class="n">num_elements</span> <span class="o">*</span> <span class="n">spatial_val</span>
+                        <span class="n">curr_ch</span> <span class="o">=</span> <span class="n">num_elements</span> <span class="o">*</span> <span class="n">curr_occupancy</span>
+                        <span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">target_ch</span> <span class="o">/</span> <span class="n">curr_ch</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span>
 
                 <span class="n">final_positions</span> <span class="o">=</span> <span class="n">positions_np</span> <span class="o">*</span> <span class="n">scale</span>
 
@@ -1497,7 +1844,8 @@ parameterization of multi-element dot arrays.</p>
         <span class="n">cha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_convex_hull_area</span><span class="p">(</span><span class="n">positions_np</span><span class="p">)</span>
         <span class="n">id_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_inter_distance</span><span class="p">(</span><span class="n">positions_np</span><span class="p">)</span>
 
-        <span class="n">density</span> <span class="o">=</span> <span class="n">tsa</span> <span class="o">/</span> <span class="n">cha</span> <span class="k">if</span> <span class="n">cha</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="n">density_num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_density</span><span class="p">(</span><span class="n">positions_np</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">density_type</span><span class="o">=</span><span class="s1">&#39;numerical&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">cha</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="n">density_surf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_density</span><span class="p">(</span><span class="n">positions_np</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">density_type</span><span class="o">=</span><span class="s1">&#39;surface&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">cha</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
         <span class="n">additive_area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">radii_np</span><span class="p">)</span>
         <span class="n">mean_occupancy</span> <span class="o">=</span> <span class="n">cha</span> <span class="o">/</span> <span class="n">num_elements</span> <span class="k">if</span> <span class="n">num_elements</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
 
@@ -1507,7 +1855,8 @@ parameterization of multi-element dot arrays.</p>
             <span class="s1">&#39;TP&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
             <span class="s1">&#39;CHA&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">cha</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
             <span class="s1">&#39;ID&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">id_val</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
-            <span class="s1">&#39;Density&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">density</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
+            <span class="s1">&#39;Density (numerical)&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">density_num</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
+            <span class="s1">&#39;Density (surface)&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">density_surf</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
             <span class="s1">&#39;AA&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">additive_area</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
             <span class="s1">&#39;MO&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">mean_occupancy</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
         <span class="p">}</span>
@@ -1524,18 +1873,20 @@ parameterization of multi-element dot arrays.</p>
         <span class="n">min_dist_factor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">save_results</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">pause_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">density_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;numerical&#39;</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">visual</span><span class="o">.</span><span class="n">Circle</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate, render, and display a dot array in PsychoPy, optionally capturing and saving the frame.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            num_elements (int): the number of dots to generate</span>
-<span class="sd">            spatial_type (str): the spatial condition type (&#39;CH&#39; for Convex Hull, &#39;ID&#39; for Inter-Distance)</span>
+<span class="sd">            spatial_type (str): the spatial condition type (&#39;CH&#39; for Convex Hull, &#39;ID&#39; for Inter-Distance, &#39;Density&#39;, or &#39;MO&#39; for Mean Occupancy)</span>
 <span class="sd">            size_type (str): the size condition type (&#39;TA&#39; for Total Area, &#39;TP&#39; for Total Perimeter)</span>
 <span class="sd">            output_filepath (Optional[str], optional): the path to save the generated image. Defaults to None.</span>
 <span class="sd">            sd_ratio (float, optional): standard deviation ratio of the dot sizes. Defaults to 0.0.</span>
 <span class="sd">            min_dist_factor (Optional[float], optional): the minimum distance factor between dots. Defaults to None.</span>
 <span class="sd">            save_results (bool, optional): whether to save the generated results. Defaults to True.</span>
 <span class="sd">            pause_time (float, optional): the time to pause between frames. Defaults to 0.0.</span>
+<span class="sd">            density_type (str): &#39;numerical&#39; (N / CH) or &#39;surface&#39; (TA / CH). Defaults to &#39;numerical&#39;.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[visual.Circle]: the list of generated dot objects</span>
@@ -1546,6 +1897,7 @@ parameterization of multi-element dot arrays.</p>
             <span class="n">num_elements</span><span class="o">=</span><span class="n">num_elements</span><span class="p">,</span>
             <span class="n">spatial_type</span><span class="o">=</span><span class="n">spatial_type</span><span class="p">,</span>
             <span class="n">size_type</span><span class="o">=</span><span class="n">size_type</span><span class="p">,</span>
+            <span class="n">density_type</span><span class="o">=</span><span class="n">density_type</span><span class="p">,</span>
             <span class="n">sd_ratio</span><span class="o">=</span><span class="n">sd_ratio</span><span class="p">,</span>
             <span class="n">min_dist_factor</span><span class="o">=</span><span class="n">min_dist_factor</span><span class="p">,</span>
         <span class="p">)</span>
@@ -1584,6 +1936,67 @@ parameterization of multi-element dot arrays.</p>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dataframe</span><span class="p">()</span>
         <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">suggest_optimal_bases</span><span class="p">(</span>
+        <span class="n">window_res</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">(</span><span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">),</span>
+        <span class="n">max_n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="n">n_anchor</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="n">spatial_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;CH&#39;</span><span class="p">,</span>
+        <span class="n">size_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;TA&#39;</span><span class="p">,</span>
+        <span class="n">density_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;numerical&#39;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Experimental calculator: suggests the optimal number of dots for a given window resolution, maximum number of dots, number of anchor dots, spatial condition type, size condition type, and density type.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            window_res (tuple | list, optional): The window resolution. Defaults to (700, 700).</span>
+<span class="sd">            max_n (int, optional): The maximum number of dots. Defaults to 20.</span>
+<span class="sd">            n_anchor (int, optional): The number of anchor dots. Defaults to 3.</span>
+<span class="sd">            spatial_type (str, optional): The spatial condition type. Defaults to &#39;CH&#39;.</span>
+<span class="sd">            size_type (str, optional): The size condition type. Defaults to &#39;TA&#39;.</span>
+<span class="sd">            density_type (str, optional): The density type. Defaults to &#39;numerical&#39;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: A dictionary containing the suggested optimal number of dots for each condition type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">half_win</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">window_res</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+        <span class="n">safe_radius</span> <span class="o">=</span> <span class="n">half_win</span> <span class="o">-</span> <span class="mf">40.0</span>  
+        <span class="n">max_safe_ch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">safe_radius</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>  
+
+        <span class="n">warning_msg</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;ID&#39;</span><span class="p">:</span>
+            <span class="n">recommended_cha</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">120000.0</span><span class="p">,</span> <span class="n">max_safe_ch</span> <span class="o">*</span> <span class="mf">0.8</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;CH&#39;</span><span class="p">:</span>
+            <span class="n">recommended_cha</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">120000.0</span><span class="p">,</span> <span class="n">max_safe_ch</span> <span class="o">*</span> <span class="mf">0.7</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">spatial_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Occupancy&#39;</span><span class="p">,</span> <span class="s1">&#39;Density&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;Density&#39;</span> <span class="ow">and</span> <span class="n">density_type</span> <span class="o">==</span> <span class="s1">&#39;surface&#39;</span><span class="p">:</span>
+                <span class="n">recommended_cha</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">120000.0</span><span class="p">,</span> <span class="n">max_safe_ch</span> <span class="o">*</span> <span class="mf">0.7</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">max_allowed_base_cha</span> <span class="o">=</span> <span class="n">max_safe_ch</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_anchor</span> <span class="o">/</span> <span class="n">max_n</span><span class="p">)</span>
+                <span class="n">recommended_cha</span> <span class="o">=</span> <span class="n">max_allowed_base_cha</span> <span class="o">*</span> <span class="mf">0.5</span>
+                <span class="n">max_sensible_cha</span> <span class="o">=</span> <span class="mf">60000.0</span> 
+                <span class="k">if</span> <span class="n">recommended_cha</span> <span class="o">&gt;</span> <span class="n">max_sensible_cha</span><span class="p">:</span>
+                    <span class="n">recommended_cha</span> <span class="o">=</span> <span class="n">max_sensible_cha</span>
+                <span class="k">if</span> <span class="n">recommended_cha</span> <span class="o">&lt;</span> <span class="mf">3000.0</span><span class="p">:</span>
+                    <span class="n">recommended_cha</span> <span class="o">=</span> <span class="mf">3000.0</span>
+                    <span class="n">warning_msg</span> <span class="o">=</span> <span class="s2">&quot;Warning: The recommended base_cha is too small.&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">recommended_cha</span> <span class="o">=</span> <span class="mf">50000.0</span>
+
+        <span class="k">if</span> <span class="n">size_type</span> <span class="o">==</span> <span class="s1">&#39;TA&#39;</span><span class="p">:</span>
+            <span class="n">recommended_size</span> <span class="o">=</span> <span class="n">recommended_cha</span> <span class="o">*</span> <span class="mf">0.20</span>
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="n">recommended_size</span> <span class="o">=</span> <span class="mf">30000.0</span> <span class="k">if</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;ID&#39;</span> <span class="k">else</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">recommended_cha</span><span class="p">)</span> <span class="o">*</span> <span class="mf">50.0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;base_cha&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">recommended_cha</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="s2">&quot;base_ta&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">recommended_size</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="s2">&quot;n_anchor&quot;</span><span class="p">:</span> <span class="n">n_anchor</span><span class="p">,</span>
+            <span class="s2">&quot;max_safe_window_radius&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">safe_radius</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="s2">&quot;warning&quot;</span><span class="p">:</span> <span class="n">warning_msg</span>
+        <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -1604,7 +2017,7 @@ parameterization of multi-element dot arrays.</p>
 
 
 <h3 id="panda.generator.PANDA.generate_and_save" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">generate_and_save</span><span class="p">(</span><span class="n">num_elements</span><span class="p">,</span> <span class="n">spatial_type</span><span class="p">,</span> <span class="n">size_type</span><span class="p">,</span> <span class="n">output_filepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sd_ratio</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">min_dist_factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_results</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pause_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">generate_and_save</span><span class="p">(</span><span class="n">num_elements</span><span class="p">,</span> <span class="n">spatial_type</span><span class="p">,</span> <span class="n">size_type</span><span class="p">,</span> <span class="n">output_filepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sd_ratio</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">min_dist_factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_results</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pause_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">density_type</span><span class="o">=</span><span class="s1">&#39;numerical&#39;</span><span class="p">)</span></code>
 
 </h3>
 
@@ -1650,7 +2063,7 @@ parameterization of multi-element dot arrays.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>the spatial condition type ('CH' for Convex Hull, 'ID' for Inter-Distance)</p>
+                <p>the spatial condition type ('CH' for Convex Hull, 'ID' for Inter-Distance, 'Density', or 'MO' for Mean Occupancy)</p>
               </div>
             </td>
             <td>
@@ -1753,6 +2166,22 @@ parameterization of multi-element dot arrays.</p>
                   <code>0.0</code>
             </td>
           </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>density_type</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>'numerical' (N / CH) or 'surface' (TA / CH). Defaults to 'numerical'.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;numerical&#39;</code>
+            </td>
+          </tr>
       </tbody>
     </table>
 
@@ -1782,54 +2211,57 @@ parameterization of multi-element dot arrays.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>panda\generator.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">319</span>
-<span class="normal">320</span>
-<span class="normal">321</span>
-<span class="normal">322</span>
-<span class="normal">323</span>
-<span class="normal">324</span>
-<span class="normal">325</span>
-<span class="normal">326</span>
-<span class="normal">327</span>
-<span class="normal">328</span>
-<span class="normal">329</span>
-<span class="normal">330</span>
-<span class="normal">331</span>
-<span class="normal">332</span>
-<span class="normal">333</span>
-<span class="normal">334</span>
-<span class="normal">335</span>
-<span class="normal">336</span>
-<span class="normal">337</span>
-<span class="normal">338</span>
-<span class="normal">339</span>
-<span class="normal">340</span>
-<span class="normal">341</span>
-<span class="normal">342</span>
-<span class="normal">343</span>
-<span class="normal">344</span>
-<span class="normal">345</span>
-<span class="normal">346</span>
-<span class="normal">347</span>
-<span class="normal">348</span>
-<span class="normal">349</span>
-<span class="normal">350</span>
-<span class="normal">351</span>
-<span class="normal">352</span>
-<span class="normal">353</span>
-<span class="normal">354</span>
-<span class="normal">355</span>
-<span class="normal">356</span>
-<span class="normal">357</span>
-<span class="normal">358</span>
-<span class="normal">359</span>
-<span class="normal">360</span>
-<span class="normal">361</span>
-<span class="normal">362</span>
-<span class="normal">363</span>
-<span class="normal">364</span>
-<span class="normal">365</span>
-<span class="normal">366</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_and_save</span><span class="p">(</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">434</span>
+<span class="normal">435</span>
+<span class="normal">436</span>
+<span class="normal">437</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span>
+<span class="normal">448</span>
+<span class="normal">449</span>
+<span class="normal">450</span>
+<span class="normal">451</span>
+<span class="normal">452</span>
+<span class="normal">453</span>
+<span class="normal">454</span>
+<span class="normal">455</span>
+<span class="normal">456</span>
+<span class="normal">457</span>
+<span class="normal">458</span>
+<span class="normal">459</span>
+<span class="normal">460</span>
+<span class="normal">461</span>
+<span class="normal">462</span>
+<span class="normal">463</span>
+<span class="normal">464</span>
+<span class="normal">465</span>
+<span class="normal">466</span>
+<span class="normal">467</span>
+<span class="normal">468</span>
+<span class="normal">469</span>
+<span class="normal">470</span>
+<span class="normal">471</span>
+<span class="normal">472</span>
+<span class="normal">473</span>
+<span class="normal">474</span>
+<span class="normal">475</span>
+<span class="normal">476</span>
+<span class="normal">477</span>
+<span class="normal">478</span>
+<span class="normal">479</span>
+<span class="normal">480</span>
+<span class="normal">481</span>
+<span class="normal">482</span>
+<span class="normal">483</span>
+<span class="normal">484</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_and_save</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">num_elements</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">spatial_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1839,18 +2271,20 @@ parameterization of multi-element dot arrays.</p>
     <span class="n">min_dist_factor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">save_results</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">pause_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">density_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;numerical&#39;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">visual</span><span class="o">.</span><span class="n">Circle</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate, render, and display a dot array in PsychoPy, optionally capturing and saving the frame.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        num_elements (int): the number of dots to generate</span>
-<span class="sd">        spatial_type (str): the spatial condition type (&#39;CH&#39; for Convex Hull, &#39;ID&#39; for Inter-Distance)</span>
+<span class="sd">        spatial_type (str): the spatial condition type (&#39;CH&#39; for Convex Hull, &#39;ID&#39; for Inter-Distance, &#39;Density&#39;, or &#39;MO&#39; for Mean Occupancy)</span>
 <span class="sd">        size_type (str): the size condition type (&#39;TA&#39; for Total Area, &#39;TP&#39; for Total Perimeter)</span>
 <span class="sd">        output_filepath (Optional[str], optional): the path to save the generated image. Defaults to None.</span>
 <span class="sd">        sd_ratio (float, optional): standard deviation ratio of the dot sizes. Defaults to 0.0.</span>
 <span class="sd">        min_dist_factor (Optional[float], optional): the minimum distance factor between dots. Defaults to None.</span>
 <span class="sd">        save_results (bool, optional): whether to save the generated results. Defaults to True.</span>
 <span class="sd">        pause_time (float, optional): the time to pause between frames. Defaults to 0.0.</span>
+<span class="sd">        density_type (str): &#39;numerical&#39; (N / CH) or &#39;surface&#39; (TA / CH). Defaults to &#39;numerical&#39;.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        List[visual.Circle]: the list of generated dot objects</span>
@@ -1861,6 +2295,7 @@ parameterization of multi-element dot arrays.</p>
         <span class="n">num_elements</span><span class="o">=</span><span class="n">num_elements</span><span class="p">,</span>
         <span class="n">spatial_type</span><span class="o">=</span><span class="n">spatial_type</span><span class="p">,</span>
         <span class="n">size_type</span><span class="o">=</span><span class="n">size_type</span><span class="p">,</span>
+        <span class="n">density_type</span><span class="o">=</span><span class="n">density_type</span><span class="p">,</span>
         <span class="n">sd_ratio</span><span class="o">=</span><span class="n">sd_ratio</span><span class="p">,</span>
         <span class="n">min_dist_factor</span><span class="o">=</span><span class="n">min_dist_factor</span><span class="p">,</span>
     <span class="p">)</span>
@@ -1887,7 +2322,7 @@ parameterization of multi-element dot arrays.</p>
 
 
 <h3 id="panda.generator.PANDA.generate_balanced_set" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">generate_balanced_set</span><span class="p">(</span><span class="n">num_elements</span><span class="p">,</span> <span class="n">spatial_type</span><span class="p">,</span> <span class="n">size_type</span><span class="p">,</span> <span class="n">sd_ratio</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">min_dist_factor</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">generate_balanced_set</span><span class="p">(</span><span class="n">num_elements</span><span class="p">,</span> <span class="n">spatial_type</span><span class="p">,</span> <span class="n">size_type</span><span class="p">,</span> <span class="n">density_type</span><span class="o">=</span><span class="s1">&#39;numerical&#39;</span><span class="p">,</span> <span class="n">sd_ratio</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">min_dist_factor</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 </h3>
 
@@ -1933,7 +2368,7 @@ parameterization of multi-element dot arrays.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>the spatial condition type ('CH' for Convex Hull, 'ID' for Inter-Distance)</p>
+                <p>the spatial condition type ('CH' for Convex Hull, 'ID' for Inter-Distance, 'Density', or 'MO' for Mean Occupancy)</p>
               </div>
             </td>
             <td>
@@ -1954,6 +2389,22 @@ parameterization of multi-element dot arrays.</p>
             </td>
             <td>
                 <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>density_type</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>'numerical' (N / CH) or 'surface' (TA / CH). Defaults to 'numerical'.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;numerical&#39;</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -2050,82 +2501,7 @@ parameterization of multi-element dot arrays.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>panda\generator.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">162</span>
-<span class="normal">163</span>
-<span class="normal">164</span>
-<span class="normal">165</span>
-<span class="normal">166</span>
-<span class="normal">167</span>
-<span class="normal">168</span>
-<span class="normal">169</span>
-<span class="normal">170</span>
-<span class="normal">171</span>
-<span class="normal">172</span>
-<span class="normal">173</span>
-<span class="normal">174</span>
-<span class="normal">175</span>
-<span class="normal">176</span>
-<span class="normal">177</span>
-<span class="normal">178</span>
-<span class="normal">179</span>
-<span class="normal">180</span>
-<span class="normal">181</span>
-<span class="normal">182</span>
-<span class="normal">183</span>
-<span class="normal">184</span>
-<span class="normal">185</span>
-<span class="normal">186</span>
-<span class="normal">187</span>
-<span class="normal">188</span>
-<span class="normal">189</span>
-<span class="normal">190</span>
-<span class="normal">191</span>
-<span class="normal">192</span>
-<span class="normal">193</span>
-<span class="normal">194</span>
-<span class="normal">195</span>
-<span class="normal">196</span>
-<span class="normal">197</span>
-<span class="normal">198</span>
-<span class="normal">199</span>
-<span class="normal">200</span>
-<span class="normal">201</span>
-<span class="normal">202</span>
-<span class="normal">203</span>
-<span class="normal">204</span>
-<span class="normal">205</span>
-<span class="normal">206</span>
-<span class="normal">207</span>
-<span class="normal">208</span>
-<span class="normal">209</span>
-<span class="normal">210</span>
-<span class="normal">211</span>
-<span class="normal">212</span>
-<span class="normal">213</span>
-<span class="normal">214</span>
-<span class="normal">215</span>
-<span class="normal">216</span>
-<span class="normal">217</span>
-<span class="normal">218</span>
-<span class="normal">219</span>
-<span class="normal">220</span>
-<span class="normal">221</span>
-<span class="normal">222</span>
-<span class="normal">223</span>
-<span class="normal">224</span>
-<span class="normal">225</span>
-<span class="normal">226</span>
-<span class="normal">227</span>
-<span class="normal">228</span>
-<span class="normal">229</span>
-<span class="normal">230</span>
-<span class="normal">231</span>
-<span class="normal">232</span>
-<span class="normal">233</span>
-<span class="normal">234</span>
-<span class="normal">235</span>
-<span class="normal">236</span>
-<span class="normal">237</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">237</span>
 <span class="normal">238</span>
 <span class="normal">239</span>
 <span class="normal">240</span>
@@ -2169,11 +2545,125 @@ parameterization of multi-element dot arrays.</p>
 <span class="normal">278</span>
 <span class="normal">279</span>
 <span class="normal">280</span>
-<span class="normal">281</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_balanced_set</span><span class="p">(</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span>
+<span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span>
+<span class="normal">357</span>
+<span class="normal">358</span>
+<span class="normal">359</span>
+<span class="normal">360</span>
+<span class="normal">361</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span>
+<span class="normal">367</span>
+<span class="normal">368</span>
+<span class="normal">369</span>
+<span class="normal">370</span>
+<span class="normal">371</span>
+<span class="normal">372</span>
+<span class="normal">373</span>
+<span class="normal">374</span>
+<span class="normal">375</span>
+<span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span>
+<span class="normal">380</span>
+<span class="normal">381</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span>
+<span class="normal">386</span>
+<span class="normal">387</span>
+<span class="normal">388</span>
+<span class="normal">389</span>
+<span class="normal">390</span>
+<span class="normal">391</span>
+<span class="normal">392</span>
+<span class="normal">393</span>
+<span class="normal">394</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_balanced_set</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">num_elements</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">spatial_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">size_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">density_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;numerical&#39;</span><span class="p">,</span>
     <span class="n">sd_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
     <span class="n">min_dist_factor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">visual</span><span class="o">.</span><span class="n">Circle</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
@@ -2181,8 +2671,9 @@ parameterization of multi-element dot arrays.</p>
 
 <span class="sd">    Args:</span>
 <span class="sd">        num_elements (int): the number of dots to generate</span>
-<span class="sd">        spatial_type (str): the spatial condition type (&#39;CH&#39; for Convex Hull, &#39;ID&#39; for Inter-Distance)</span>
+<span class="sd">        spatial_type (str): the spatial condition type (&#39;CH&#39; for Convex Hull, &#39;ID&#39; for Inter-Distance, &#39;Density&#39;, or &#39;MO&#39; for Mean Occupancy)</span>
 <span class="sd">        size_type (str): the size condition type (&#39;TA&#39; for Total Area, &#39;TP&#39; for Total Perimeter)</span>
+<span class="sd">        density_type (str): &#39;numerical&#39; (N / CH) or &#39;surface&#39; (TA / CH). Defaults to &#39;numerical&#39;.</span>
 <span class="sd">        sd_ratio (float, optional): standard deviation ratio of the dot sizes. Defaults to 0.0.</span>
 <span class="sd">        min_dist_factor (Optional[float], optional): the minimum distance factor between dots. Defaults to None.</span>
 
@@ -2193,13 +2684,15 @@ parameterization of multi-element dot arrays.</p>
 <span class="sd">    Returns:</span>
 <span class="sd">        Tuple[List[visual.Circle], List[float], List[List[float]]]: A tuple containing the generated dot objects, their radii, and their positions.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">num_elements</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;CH&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">num_elements</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">spatial_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;CH&#39;</span><span class="p">,</span> <span class="s1">&#39;Density&#39;</span><span class="p">,</span> <span class="s1">&#39;MO&#39;</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;Numerosity of elements must be at least 3 for Convex Hull (CH) spatial type.&quot;</span>
         <span class="p">)</span>
 
+    <span class="bp">self</span><span class="o">.</span><span class="n">_update_bases</span><span class="p">()</span>
+
     <span class="n">spatial_val</span><span class="p">,</span> <span class="n">size_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_condition_values</span><span class="p">(</span>
-        <span class="n">spatial_type</span><span class="p">,</span> <span class="n">size_type</span>
+        <span class="n">spatial_type</span><span class="p">,</span> <span class="n">size_type</span><span class="p">,</span> <span class="n">density_type</span>
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">min_dist_factor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2219,8 +2712,20 @@ parameterization of multi-element dot arrays.</p>
 
     <span class="k">if</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;CH&#39;</span><span class="p">:</span>
         <span class="n">target_spawn_radius</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">spatial_val</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;ID&#39;</span><span class="p">:</span>
         <span class="n">target_spawn_radius</span> <span class="o">=</span> <span class="n">spatial_val</span> <span class="o">*</span> <span class="mf">1.1</span>
+    <span class="k">elif</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;Density&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">density_type</span> <span class="o">==</span> <span class="s1">&#39;numerical&#39;</span><span class="p">:</span>
+            <span class="n">target_ch</span> <span class="o">=</span> <span class="n">num_elements</span> <span class="o">/</span> <span class="n">spatial_val</span>
+        <span class="k">else</span><span class="p">:</span>  
+            <span class="n">total_area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">radii</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">target_ch</span> <span class="o">=</span> <span class="n">total_area</span> <span class="o">/</span> <span class="n">spatial_val</span>  
+        <span class="n">target_spawn_radius</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">target_ch</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;MO&#39;</span><span class="p">:</span>
+        <span class="n">target_ch</span> <span class="o">=</span> <span class="n">num_elements</span> <span class="o">*</span> <span class="n">spatial_val</span>
+        <span class="n">target_spawn_radius</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">target_ch</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">target_spawn_radius</span> <span class="o">=</span> <span class="n">safe_margin</span> <span class="o">*</span> <span class="mf">0.5</span>
 
     <span class="n">target_spawn_radius</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">target_spawn_radius</span><span class="p">,</span> <span class="n">safe_margin</span><span class="p">)</span>
 
@@ -2257,10 +2762,32 @@ parameterization of multi-element dot arrays.</p>
 
             <span class="k">if</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;CH&#39;</span><span class="p">:</span>
                 <span class="n">curr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_convex_hull_area</span><span class="p">(</span><span class="n">positions_np</span><span class="p">)</span>
-                <span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">spatial_val</span> <span class="o">/</span> <span class="n">curr</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">spatial_val</span> <span class="o">/</span> <span class="n">curr</span><span class="p">)</span> <span class="k">if</span> <span class="n">curr</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">1.0</span>
+            <span class="k">elif</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;ID&#39;</span><span class="p">:</span>
                 <span class="n">curr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_inter_distance</span><span class="p">(</span><span class="n">positions_np</span><span class="p">)</span>
-                <span class="n">scale</span> <span class="o">=</span> <span class="n">spatial_val</span> <span class="o">/</span> <span class="n">curr</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="n">spatial_val</span> <span class="o">/</span> <span class="n">curr</span> <span class="k">if</span> <span class="n">curr</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">1.0</span>
+            <span class="k">elif</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;Density&#39;</span><span class="p">:</span>
+                <span class="n">curr_density</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_density</span><span class="p">(</span><span class="n">positions_np</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">density_type</span><span class="o">=</span><span class="n">density_type</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">curr_density</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">density_type</span> <span class="o">==</span> <span class="s1">&#39;numerical&#39;</span><span class="p">:</span>
+                        <span class="n">target_ch</span> <span class="o">=</span> <span class="n">num_elements</span> <span class="o">/</span> <span class="n">spatial_val</span>
+                        <span class="n">curr_ch</span> <span class="o">=</span> <span class="n">num_elements</span> <span class="o">/</span> <span class="n">curr_density</span>
+                    <span class="k">else</span><span class="p">:</span> 
+                        <span class="n">total_area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">radii</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+                        <span class="n">target_ch</span> <span class="o">=</span> <span class="n">total_area</span> <span class="o">/</span> <span class="n">spatial_val</span>
+                        <span class="n">curr_ch</span> <span class="o">=</span> <span class="n">total_area</span> <span class="o">/</span> <span class="n">curr_density</span>
+
+                    <span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">target_ch</span> <span class="o">/</span> <span class="n">curr_ch</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="k">elif</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;MO&#39;</span><span class="p">:</span>
+                <span class="n">curr_occupancy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_mean_occupancy</span><span class="p">(</span><span class="n">positions_np</span><span class="p">,</span> <span class="n">num_elements</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">curr_occupancy</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">target_ch</span> <span class="o">=</span> <span class="n">num_elements</span> <span class="o">*</span> <span class="n">spatial_val</span>
+                    <span class="n">curr_ch</span> <span class="o">=</span> <span class="n">num_elements</span> <span class="o">*</span> <span class="n">curr_occupancy</span>
+                    <span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">target_ch</span> <span class="o">/</span> <span class="n">curr_ch</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span>
 
             <span class="n">final_positions</span> <span class="o">=</span> <span class="n">positions_np</span> <span class="o">*</span> <span class="n">scale</span>
 
@@ -2334,13 +2861,13 @@ parameterization of multi-element dot arrays.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>panda\generator.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">368</span>
-<span class="normal">369</span>
-<span class="normal">370</span>
-<span class="normal">371</span>
-<span class="normal">372</span>
-<span class="normal">373</span>
-<span class="normal">374</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">486</span>
+<span class="normal">487</span>
+<span class="normal">488</span>
+<span class="normal">489</span>
+<span class="normal">490</span>
+<span class="normal">491</span>
+<span class="normal">492</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return all logged stimulus ground-truth metrics as a pandas DataFrame.</span>
 
 <span class="sd">    Returns:</span>
@@ -2455,41 +2982,43 @@ parameterization of multi-element dot arrays.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>panda\generator.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">283</span>
-<span class="normal">284</span>
-<span class="normal">285</span>
-<span class="normal">286</span>
-<span class="normal">287</span>
-<span class="normal">288</span>
-<span class="normal">289</span>
-<span class="normal">290</span>
-<span class="normal">291</span>
-<span class="normal">292</span>
-<span class="normal">293</span>
-<span class="normal">294</span>
-<span class="normal">295</span>
-<span class="normal">296</span>
-<span class="normal">297</span>
-<span class="normal">298</span>
-<span class="normal">299</span>
-<span class="normal">300</span>
-<span class="normal">301</span>
-<span class="normal">302</span>
-<span class="normal">303</span>
-<span class="normal">304</span>
-<span class="normal">305</span>
-<span class="normal">306</span>
-<span class="normal">307</span>
-<span class="normal">308</span>
-<span class="normal">309</span>
-<span class="normal">310</span>
-<span class="normal">311</span>
-<span class="normal">312</span>
-<span class="normal">313</span>
-<span class="normal">314</span>
-<span class="normal">315</span>
-<span class="normal">316</span>
-<span class="normal">317</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">log_ground_truth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_elements</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">radii</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">positions</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span>
+<span class="normal">399</span>
+<span class="normal">400</span>
+<span class="normal">401</span>
+<span class="normal">402</span>
+<span class="normal">403</span>
+<span class="normal">404</span>
+<span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
+<span class="normal">409</span>
+<span class="normal">410</span>
+<span class="normal">411</span>
+<span class="normal">412</span>
+<span class="normal">413</span>
+<span class="normal">414</span>
+<span class="normal">415</span>
+<span class="normal">416</span>
+<span class="normal">417</span>
+<span class="normal">418</span>
+<span class="normal">419</span>
+<span class="normal">420</span>
+<span class="normal">421</span>
+<span class="normal">422</span>
+<span class="normal">423</span>
+<span class="normal">424</span>
+<span class="normal">425</span>
+<span class="normal">426</span>
+<span class="normal">427</span>
+<span class="normal">428</span>
+<span class="normal">429</span>
+<span class="normal">430</span>
+<span class="normal">431</span>
+<span class="normal">432</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">log_ground_truth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_elements</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">radii</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">positions</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute and log exact geometric ground-truth metrics for the generated dot array.</span>
 
 <span class="sd">    Args:</span>
@@ -2508,7 +3037,8 @@ parameterization of multi-element dot arrays.</p>
     <span class="n">cha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_convex_hull_area</span><span class="p">(</span><span class="n">positions_np</span><span class="p">)</span>
     <span class="n">id_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_inter_distance</span><span class="p">(</span><span class="n">positions_np</span><span class="p">)</span>
 
-    <span class="n">density</span> <span class="o">=</span> <span class="n">tsa</span> <span class="o">/</span> <span class="n">cha</span> <span class="k">if</span> <span class="n">cha</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+    <span class="n">density_num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_density</span><span class="p">(</span><span class="n">positions_np</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">density_type</span><span class="o">=</span><span class="s1">&#39;numerical&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">cha</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+    <span class="n">density_surf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_density</span><span class="p">(</span><span class="n">positions_np</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">density_type</span><span class="o">=</span><span class="s1">&#39;surface&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">cha</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
     <span class="n">additive_area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">radii_np</span><span class="p">)</span>
     <span class="n">mean_occupancy</span> <span class="o">=</span> <span class="n">cha</span> <span class="o">/</span> <span class="n">num_elements</span> <span class="k">if</span> <span class="n">num_elements</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
 
@@ -2518,7 +3048,8 @@ parameterization of multi-element dot arrays.</p>
         <span class="s1">&#39;TP&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
         <span class="s1">&#39;CHA&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">cha</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
         <span class="s1">&#39;ID&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">id_val</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
-        <span class="s1">&#39;Density&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">density</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
+        <span class="s1">&#39;Density (numerical)&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">density_num</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
+        <span class="s1">&#39;Density (surface)&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">density_surf</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
         <span class="s1">&#39;AA&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">additive_area</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
         <span class="s1">&#39;MO&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">mean_occupancy</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
     <span class="p">}</span>
@@ -2546,10 +3077,10 @@ parameterization of multi-element dot arrays.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>panda\generator.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">376</span>
-<span class="normal">377</span>
-<span class="normal">378</span>
-<span class="normal">379</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">reset_results</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">494</span>
+<span class="normal">495</span>
+<span class="normal">496</span>
+<span class="normal">497</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">reset_results</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Clear all stored ground-truth metrics from internal memory.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
@@ -2606,14 +3137,14 @@ parameterization of multi-element dot arrays.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>panda\generator.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">381</span>
-<span class="normal">382</span>
-<span class="normal">383</span>
-<span class="normal">384</span>
-<span class="normal">385</span>
-<span class="normal">386</span>
-<span class="normal">387</span>
-<span class="normal">388</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">save_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">499</span>
+<span class="normal">500</span>
+<span class="normal">501</span>
+<span class="normal">502</span>
+<span class="normal">503</span>
+<span class="normal">504</span>
+<span class="normal">505</span>
+<span class="normal">506</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">save_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Export all accumulated ground-truth metrics to a CSV file.</span>
 
 <span class="sd">    Args:</span>
@@ -2621,6 +3152,285 @@ parameterization of multi-element dot arrays.</p>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dataframe</span><span class="p">()</span>
     <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="panda.generator.PANDA.suggest_optimal_bases" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">suggest_optimal_bases</span><span class="p">(</span><span class="n">window_res</span><span class="o">=</span><span class="p">(</span><span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">),</span> <span class="n">max_n</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">n_anchor</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">spatial_type</span><span class="o">=</span><span class="s1">&#39;CH&#39;</span><span class="p">,</span> <span class="n">size_type</span><span class="o">=</span><span class="s1">&#39;TA&#39;</span><span class="p">,</span> <span class="n">density_type</span><span class="o">=</span><span class="s1">&#39;numerical&#39;</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Experimental calculator: suggests the optimal number of dots for a given window resolution, maximum number of dots, number of anchor dots, spatial condition type, size condition type, and density type.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>window_res</code>
+            </td>
+            <td>
+                  <code><span title="tuple">tuple</span> | <span title="list">list</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The window resolution. Defaults to (700, 700).</p>
+              </div>
+            </td>
+            <td>
+                  <code>(700, 700)</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>max_n</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The maximum number of dots. Defaults to 20.</p>
+              </div>
+            </td>
+            <td>
+                  <code>20</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>n_anchor</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The number of anchor dots. Defaults to 3.</p>
+              </div>
+            </td>
+            <td>
+                  <code>3</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>spatial_type</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The spatial condition type. Defaults to 'CH'.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;CH&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>size_type</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The size condition type. Defaults to 'TA'.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;TA&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>density_type</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The density type. Defaults to 'numerical'.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;numerical&#39;</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>dict</code></td>            <td>
+                  <code><span title="dict">dict</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A dictionary containing the suggested optimal number of dots for each condition type.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>panda\generator.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">508</span>
+<span class="normal">509</span>
+<span class="normal">510</span>
+<span class="normal">511</span>
+<span class="normal">512</span>
+<span class="normal">513</span>
+<span class="normal">514</span>
+<span class="normal">515</span>
+<span class="normal">516</span>
+<span class="normal">517</span>
+<span class="normal">518</span>
+<span class="normal">519</span>
+<span class="normal">520</span>
+<span class="normal">521</span>
+<span class="normal">522</span>
+<span class="normal">523</span>
+<span class="normal">524</span>
+<span class="normal">525</span>
+<span class="normal">526</span>
+<span class="normal">527</span>
+<span class="normal">528</span>
+<span class="normal">529</span>
+<span class="normal">530</span>
+<span class="normal">531</span>
+<span class="normal">532</span>
+<span class="normal">533</span>
+<span class="normal">534</span>
+<span class="normal">535</span>
+<span class="normal">536</span>
+<span class="normal">537</span>
+<span class="normal">538</span>
+<span class="normal">539</span>
+<span class="normal">540</span>
+<span class="normal">541</span>
+<span class="normal">542</span>
+<span class="normal">543</span>
+<span class="normal">544</span>
+<span class="normal">545</span>
+<span class="normal">546</span>
+<span class="normal">547</span>
+<span class="normal">548</span>
+<span class="normal">549</span>
+<span class="normal">550</span>
+<span class="normal">551</span>
+<span class="normal">552</span>
+<span class="normal">553</span>
+<span class="normal">554</span>
+<span class="normal">555</span>
+<span class="normal">556</span>
+<span class="normal">557</span>
+<span class="normal">558</span>
+<span class="normal">559</span>
+<span class="normal">560</span>
+<span class="normal">561</span>
+<span class="normal">562</span>
+<span class="normal">563</span>
+<span class="normal">564</span>
+<span class="normal">565</span>
+<span class="normal">566</span>
+<span class="normal">567</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">suggest_optimal_bases</span><span class="p">(</span>
+    <span class="n">window_res</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">(</span><span class="mi">700</span><span class="p">,</span> <span class="mi">700</span><span class="p">),</span>
+    <span class="n">max_n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="n">n_anchor</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="n">spatial_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;CH&#39;</span><span class="p">,</span>
+    <span class="n">size_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;TA&#39;</span><span class="p">,</span>
+    <span class="n">density_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;numerical&#39;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Experimental calculator: suggests the optimal number of dots for a given window resolution, maximum number of dots, number of anchor dots, spatial condition type, size condition type, and density type.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        window_res (tuple | list, optional): The window resolution. Defaults to (700, 700).</span>
+<span class="sd">        max_n (int, optional): The maximum number of dots. Defaults to 20.</span>
+<span class="sd">        n_anchor (int, optional): The number of anchor dots. Defaults to 3.</span>
+<span class="sd">        spatial_type (str, optional): The spatial condition type. Defaults to &#39;CH&#39;.</span>
+<span class="sd">        size_type (str, optional): The size condition type. Defaults to &#39;TA&#39;.</span>
+<span class="sd">        density_type (str, optional): The density type. Defaults to &#39;numerical&#39;.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: A dictionary containing the suggested optimal number of dots for each condition type.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">half_win</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">window_res</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+    <span class="n">safe_radius</span> <span class="o">=</span> <span class="n">half_win</span> <span class="o">-</span> <span class="mf">40.0</span>  
+    <span class="n">max_safe_ch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">safe_radius</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>  
+
+    <span class="n">warning_msg</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;ID&#39;</span><span class="p">:</span>
+        <span class="n">recommended_cha</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">120000.0</span><span class="p">,</span> <span class="n">max_safe_ch</span> <span class="o">*</span> <span class="mf">0.8</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;CH&#39;</span><span class="p">:</span>
+        <span class="n">recommended_cha</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">120000.0</span><span class="p">,</span> <span class="n">max_safe_ch</span> <span class="o">*</span> <span class="mf">0.7</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">spatial_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Occupancy&#39;</span><span class="p">,</span> <span class="s1">&#39;Density&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;Density&#39;</span> <span class="ow">and</span> <span class="n">density_type</span> <span class="o">==</span> <span class="s1">&#39;surface&#39;</span><span class="p">:</span>
+            <span class="n">recommended_cha</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">120000.0</span><span class="p">,</span> <span class="n">max_safe_ch</span> <span class="o">*</span> <span class="mf">0.7</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">max_allowed_base_cha</span> <span class="o">=</span> <span class="n">max_safe_ch</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_anchor</span> <span class="o">/</span> <span class="n">max_n</span><span class="p">)</span>
+            <span class="n">recommended_cha</span> <span class="o">=</span> <span class="n">max_allowed_base_cha</span> <span class="o">*</span> <span class="mf">0.5</span>
+            <span class="n">max_sensible_cha</span> <span class="o">=</span> <span class="mf">60000.0</span> 
+            <span class="k">if</span> <span class="n">recommended_cha</span> <span class="o">&gt;</span> <span class="n">max_sensible_cha</span><span class="p">:</span>
+                <span class="n">recommended_cha</span> <span class="o">=</span> <span class="n">max_sensible_cha</span>
+            <span class="k">if</span> <span class="n">recommended_cha</span> <span class="o">&lt;</span> <span class="mf">3000.0</span><span class="p">:</span>
+                <span class="n">recommended_cha</span> <span class="o">=</span> <span class="mf">3000.0</span>
+                <span class="n">warning_msg</span> <span class="o">=</span> <span class="s2">&quot;Warning: The recommended base_cha is too small.&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">recommended_cha</span> <span class="o">=</span> <span class="mf">50000.0</span>
+
+    <span class="k">if</span> <span class="n">size_type</span> <span class="o">==</span> <span class="s1">&#39;TA&#39;</span><span class="p">:</span>
+        <span class="n">recommended_size</span> <span class="o">=</span> <span class="n">recommended_cha</span> <span class="o">*</span> <span class="mf">0.20</span>
+    <span class="k">else</span><span class="p">:</span> 
+        <span class="n">recommended_size</span> <span class="o">=</span> <span class="mf">30000.0</span> <span class="k">if</span> <span class="n">spatial_type</span> <span class="o">==</span> <span class="s1">&#39;ID&#39;</span> <span class="k">else</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">recommended_cha</span><span class="p">)</span> <span class="o">*</span> <span class="mf">50.0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;base_cha&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">recommended_cha</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="s2">&quot;base_ta&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">recommended_size</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="s2">&quot;n_anchor&quot;</span><span class="p">:</span> <span class="n">n_anchor</span><span class="p">,</span>
+        <span class="s2">&quot;max_safe_window_radius&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">safe_radius</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="s2">&quot;warning&quot;</span><span class="p">:</span> <span class="n">warning_msg</span>
+    <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
