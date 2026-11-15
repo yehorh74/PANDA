@@ -53,7 +53,8 @@ class PANDA:
         self.color = color
         self.results: List[Dict[str, Any]] = []
 
-        self.rng = np.random.default_rng(seed)
+        self.seed = seed
+        self.rng = np.random.default_rng(self.seed)
 
         self.n_anchor = n_anchor
         self.base_ta = base_ta if base_ta is not None else 30000.0
@@ -233,6 +234,8 @@ class PANDA:
         self.base_density_num = self.n_anchor / self.base_cha  
         self.base_density_surf = self.base_ta / self.base_cha
         self.base_occupancy = self.base_cha / self.n_anchor
+
+        self.default_size = self.default_size
 
     def generate_balanced_set(
         self,
@@ -416,8 +419,9 @@ class PANDA:
         density_surf = self._compute_density(positions_np, radii, density_type='surface') if cha > 0 else 0.0
         additive_area = np.sum(2 * radii_np)
         mean_occupancy = cha / num_elements if num_elements > 0 else 0.0
+        size_str = ", ".join(map(str, self.default_size if self.win is None else self.win.size))
 
-        metrics ={
+        metrics = {
             'N': num_elements,
             'TSA': round(tsa, 4),
             'TP': round(tp, 4),
@@ -427,6 +431,8 @@ class PANDA:
             'Density (surface)': round(density_surf, 6),
             'AA': round(additive_area, 4),
             'MO': round(mean_occupancy, 4),
+            'Seed': self.seed,
+            'Window size': size_str,
         }
         self.results.append(metrics)
         return metrics

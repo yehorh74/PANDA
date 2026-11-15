@@ -17,6 +17,24 @@ def parse_and_validate_inputs(screen):
     seed_val = int(seed_str) if seed_str else None
     screen.generator.rng = np.random.default_rng(seed_val)
 
+    win_size = []
+    if screen.window_settings.value:
+        raw_value = getattr(screen.window_settings, "value", None)
+
+        if not raw_value or not str(raw_value).strip():
+            raise ValueError("Window size parameter cannot be empty!")
+        parts_size = [x.strip() for x in str(raw_value).split(",") if x.strip()]
+        if len(parts_size) != 2:
+            raise ValueError("Window size must contain exactly 2 values separated by comma (e.g. '700, 700')!")
+        for item in parts_size:
+            if not item.isdigit():
+                raise ValueError(f"Invalid item '{item}' in size parameters!")    
+            val = int(item)
+            if not (2 <= val <= 700):
+                raise ValueError(f"Size parameter {val} must be between 2 and 700!")
+                
+            win_size.append(val)
+
     if screen.TA_settings.value:
         try:
             base_ta = float(screen.TA_settings.value)
@@ -110,4 +128,4 @@ def parse_and_validate_inputs(screen):
             for _ in range(count):
                 n_values.append(val)
 
-    return n_values, s_type, density_type, z_type, sd_val, min_dist_val, seed_val
+    return n_values, s_type, density_type, z_type, sd_val, min_dist_val, seed_val, win_size

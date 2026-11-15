@@ -23,6 +23,7 @@ def handle_save_config(screen, e):
             config = {
                 "mode": screen.radio_group.value,
                 "spatial_type": screen.spatial_dropdown.value,
+                "win_size": screen.window_settings.value,
                 "size_type": screen.size_dropdown.value,
                 "color_scheme": screen.color_dropdown.value,
                 "sd_ratio": screen.sd_slider.value,
@@ -77,6 +78,9 @@ def handle_load_config(screen, e):
             if "mode" in config:
                 screen.radio_group.value = config["mode"]
                 screen.handle_type_change(None)
+
+            if "win_size" in config:
+                screen.window_settings.value = config["win_size"]
 
             if "spatial_type" in config:
                 screen.spatial_dropdown.value = config["spatial_type"]
@@ -150,17 +154,42 @@ def handle_load_config(screen, e):
             screen.info_text.value = f"Config Load Error: {str(ex)}"
             screen.update()
 
+def flet_color_to_rgb(color_str):
+    if not color_str:
+        return (0, 0, 0)
+    
+    color_str = str(color_str).strip()
+    
+    if color_str.startswith("#") and len(color_str) == 9:
+        hex_rgb = color_str[3:]
+    elif len(color_str) == 8:  
+        hex_rgb = color_str[2:]
+    elif color_str.startswith("#") and len(color_str) == 7:  
+        hex_rgb = color_str[1:]
+    else:
+        hex_rgb = "000000"
+        
+    try:
+        r = int(hex_rgb[0:2], 16)
+        g = int(hex_rgb[2:4], 16)
+        b = int(hex_rgb[4:6], 16)
+        return (r, g, b)
+    except Exception:
+        return (0, 0, 0)
+
 def save_current_stimulus_png(screen, folder_path: str):
     if not screen.generated_datasets:
         return
 
     try:
-        img_size = 700
-        center_x = img_size / 2
-        center_y = img_size / 2
+        parts = [int(p.strip()) for p in screen.window_settings.value.split(",")]
+        center_x, center_y = parts[0] / 2 , parts[1] / 2
 
-        bg_color = ft.Colors.WHITE if screen.generator.color == ft.Colors.BLACK else ft.Colors.BLACK
-        dot_color = ft.Colors.BLACK if screen.generator.color == ft.Colors.WHITE else ft.Colors.WHITE
+        bg_color = flet_color_to_rgb(screen.canvas_container.bgcolor)
+        dot_color = flet_color_to_rgb(screen.generator.color)
+
+        print(f"DEBUG: Kolor plotna {bg_color}")
+        print(f"DEBUG: Kolor kropek {dot_color}")
 
         spatial_type = screen.spatial_dropdown.value
         size_type = screen.size_dropdown.value
@@ -168,7 +197,7 @@ def save_current_stimulus_png(screen, folder_path: str):
         idx = screen.current_index
         item = screen.generated_datasets[idx]
 
-        image = Image.new("RGB", (img_size, img_size), bg_color)
+        image = Image.new("RGB", (parts[0], parts[1]), bg_color)
         draw = ImageDraw.Draw(image)
 
         for pos, r in zip(item["positions"], item["radii"]):
@@ -210,18 +239,17 @@ def save_current_stimulus_png(screen, folder_path: str):
 def save_all(screen, folder_path: str):
     try:
         exported_rows = []
-        img_size = 700
-        center_x = img_size / 2
-        center_y = img_size / 2
+        parts = [int(p.strip()) for p in screen.window_settings.value.split(",")]
+        center_x, center_y = parts[0] / 2 , parts[1] / 2
 
-        bg_color = ft.Colors.WHITE if screen.generator.color == ft.Colors.BLACK else ft.Colors.BLACK
-        dot_color = ft.Colors.BLACK if screen.generator.color == ft.Colors.WHITE else ft.Colors.WHITE
+        bg_color = flet_color_to_rgb(screen.canvas_container.bgcolor)
+        dot_color = flet_color_to_rgb(screen.generator.color)
 
         spatial_type = screen.spatial_dropdown.value
         size_type = screen.size_dropdown.value
 
         for idx, item in enumerate(screen.generated_datasets):
-            image = Image.new("RGB", (img_size, img_size), bg_color)
+            image = Image.new("RGB", (parts[0], parts[1]), bg_color)
             draw = ImageDraw.Draw(image)
 
             for pos, r in zip(item["positions"], item["radii"]):
@@ -269,7 +297,7 @@ def reset_all(screen, e):
     
     screen.spatial_dropdown.value = "CH"
     screen.size_dropdown.value = "TA"
-    screen.color_dropdown.value = "black_on_white"
+    screen.color_dropdown.value = "none"
     
     screen.canvas_container.bgcolor = ft.Colors.WHITE
     screen.generator.color = ft.Colors.BLACK
@@ -286,6 +314,7 @@ def reset_all(screen, e):
     screen.min_dist_slider.value = 1.0
     screen.min_dist_slider.label = "MD: 1.00"
 
+    screen.window_settings.value = "700, 700"
     screen.TA_settings.value = "30000.0"
     screen.CH_settings.value = "120000.0"
     screen.anchor_n.value = "3"

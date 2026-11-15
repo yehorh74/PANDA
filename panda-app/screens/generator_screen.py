@@ -245,7 +245,7 @@ class GeneratorScreen(ft.View):
         ], spacing=5)
 
         self.background_color = ColorPicker(
-            color="#000000",
+            color="#ffffff",
             color_history=[
             ],
             on_color_change=self.on_back_color_change,
@@ -350,6 +350,21 @@ class GeneratorScreen(ft.View):
             disabled=True,  
             on_change=self.min_dist_changed
         )
+
+        self.window_settings = ft.TextField(value="700, 700", width=300, keyboard_type=ft.KeyboardType.NUMBER, input_filter=ft.InputFilter(regex_string=r"[0-9.]"))
+
+        window_section = ft.Column([
+            ft.Row([
+                ft.Text("Window size", size=14, weight=ft.FontWeight.W_500),
+                ft.Icon(
+                    icon=ft.Icons.HELP_OUTLINE,
+                    size=16,
+                    color=ft.Colors.GREY_500,
+                    tooltip="Enter the window size e.g. 200, 200 (max. 700, 700)."
+                )
+            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=300),
+            self.window_settings
+        ], spacing=5)
 
         self.TA_settings = ft.TextField(value="30000.0", width=300, keyboard_type=ft.KeyboardType.NUMBER, input_filter=ft.InputFilter(regex_string=r"[0-9.]"))
 
@@ -468,11 +483,13 @@ class GeneratorScreen(ft.View):
             width=720,
             height=760,
             alignment=ft.Alignment.CENTER,
-            bgcolor=ft.Colors.WHITE,
+            bgcolor=self.background_color.color,
             border=ft.Border.all(1, ft.Colors.GREY_400),
             clip_behavior=ft.ClipBehavior.HARD_EDGE,
             padding=10
         )
+
+        print(f"DEBUG: Ploto {self.canvas_container.bgcolor}")
 
         save_btn = ft.Button(
             content=ft.Text("Save all dots and data"),
@@ -525,6 +542,7 @@ class GeneratorScreen(ft.View):
                         self.min_dist_slider,
                         ft.Divider(),
                         ft.Text("Advanced settings", size=18, weight=ft.FontWeight.BOLD),
+                        window_section,
                         ta_section,
                         ch_section,
                         anchors_section,
@@ -744,20 +762,22 @@ class GeneratorScreen(ft.View):
         selected_color = e.data or getattr(e.control, "color", None)
     
         if selected_color:
+            self.color_dropdown.value = "none"
             self.canvas_container.bgcolor = selected_color
             self.prev_btn.icon_color = ft.Colors.GREY_900 
             self.next_btn.icon_color = ft.Colors.GREY_900 
             self.index_label.color = ft.Colors.GREY_900 
             self.delete_btn.icon_color = ft.Colors.GREY_900 
             self.save_png_btn.icon_color = ft.Colors.GREY_900 
-            
+
+            self.color_dropdown.update()
             self.canvas_container.update()
             self.prev_btn.update()
             self.next_btn.update()
             self.index_label.update()
             self.delete_btn.update()
             self.save_png_btn.update()
-        #print(f"color: {e.data}")
+        print(f"color: {e.data}")
 
     def on_back_history_change(self, e: ft.ControlEvent):
         if hasattr(e.control, "color_history"):
@@ -769,6 +789,7 @@ class GeneratorScreen(ft.View):
         selected_color = e.data or getattr(e.control, "color", None)
     
         if selected_color:
+            self.color_dropdown.value = "none"
             self.generator.color = selected_color
             self.prev_btn.icon_color = ft.Colors.GREY_900 
             self.next_btn.icon_color = ft.Colors.GREY_900 
@@ -776,6 +797,7 @@ class GeneratorScreen(ft.View):
             self.delete_btn.icon_color = ft.Colors.GREY_900 
             self.save_png_btn.icon_color = ft.Colors.GREY_900 
 
+            self.color_dropdown.update()
             self.update_dots_color(self.generator.color)
             self.canvas_container.update()
             self.prev_btn.update()
@@ -783,7 +805,7 @@ class GeneratorScreen(ft.View):
             self.index_label.update()
             self.delete_btn.update()
             self.save_png_btn.update()
-        #print(f"color: {e.data}")
+        print(f"color: {e.data}")
 
     def on_dot_history_change(self, e: ft.ControlEvent):
         if hasattr(e.control, "color_history"):
@@ -840,12 +862,14 @@ class GeneratorScreen(ft.View):
 
     def handle_generation(self, e):
         try:
-            n_values, s_type, density_type, z_type, sd_val, min_dist_val, seed_val = (
+            n_values, s_type, density_type, z_type, sd_val, min_dist_val, seed_val, win_size = (
                 parse_and_validate_inputs(self)
             )
 
             self.generator.base_cha = float(self.CH_settings.value)
             self.generator.base_ta = float(self.TA_settings.value)
+            self.generator.default_size = win_size
+            size_str = ", ".join(map(str, self.generator.default_size))
 
             self.generated_datasets = []
             for num in n_values:
@@ -879,7 +903,7 @@ class GeneratorScreen(ft.View):
                     if seed_val is not None
                     else " (Random)"
                 )
-                self.info_text.value = f"Success{seed_info}! Generated {len(self.generated_datasets)} items. TSA: {m['TSA']}, CHA: {m['CHA']}, ID: {m['ID']}, TP: {m['TP']}, Density (numerical): {m['Density (numerical)']}, Density (surface): {m['Density (surface)']}, MO: {m['MO']}"
+                self.info_text.value = f"Success{seed_info}! Generated {len(self.generated_datasets)} items. TSA: {m['TSA']}, CHA: {m['CHA']}, ID: {m['ID']}, TP: {m['TP']}, Density (numerical): {m['Density (numerical)']}, Density (surface): {m['Density (surface)']}, MO: {m['MO']}, Window size: {size_str}"
             else:
                 self.info_text.value = "Success! Generated 0 items."
             self.update()
