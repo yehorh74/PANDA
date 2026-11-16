@@ -1,4 +1,5 @@
 import os
+import sys
 import warnings
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
@@ -7,7 +8,12 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 import flet as ft
 
 from screens.generator_screen import GeneratorScreen
+from core.debug_log import global_exception_handler
 
+DEBUG = True
+
+if DEBUG:
+    sys.excepthook = global_exception_handler
 class App:
     def __init__(self, page: ft.Page):
         self.page = page
