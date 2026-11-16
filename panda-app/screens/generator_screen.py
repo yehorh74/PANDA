@@ -255,8 +255,10 @@ class GeneratorScreen(ft.View):
                 ColorLabelType.HEX,
                 ColorLabelType.RGB,
             ],
-            picker_area_border_radius=ft.BorderRadius.all(20),
+            picker_area_border_radius=ft.BorderRadius.all(5),
         )
+
+        self.type_back_color = ft.TextField(value=self.background_color.color, width=300, label="Enter the key of background color", on_submit=self.type_back_color_submit)
 
         background_color_section = ft.Column([
             ft.Row([
@@ -268,7 +270,8 @@ class GeneratorScreen(ft.View):
                     tooltip="The background color of the canvas."
                 )
             ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=300),
-            self.background_color
+            self.background_color,
+            self.type_back_color
         ], spacing=5)
 
         self.dot_color = ColorPicker(
@@ -282,12 +285,14 @@ class GeneratorScreen(ft.View):
                 ColorLabelType.HEX,
                 ColorLabelType.RGB,
             ],
-            picker_area_border_radius=ft.BorderRadius.all(20),
+            picker_area_border_radius=ft.BorderRadius.all(5),
         )
+
+        self.type_dot_color = ft.TextField(value=self.dot_color.color, label="Enter the key of dots color", width=300, on_submit=self.type_dot_color_submit)
 
         dot_color_section = ft.Column([
             ft.Row([
-                ft.Text("Dot color", size=14, weight=ft.FontWeight.W_500),
+                ft.Text("Dots color", size=14, weight=ft.FontWeight.W_500),
                 ft.Icon(
                     icon=ft.Icons.HELP_OUTLINE,
                     size=16,
@@ -295,7 +300,8 @@ class GeneratorScreen(ft.View):
                     tooltip="The color of the dots."
                 )
             ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=300),
-            self.dot_color
+            self.dot_color,
+            self.type_dot_color
         ], spacing=5)
 
         self.sd_text = ft.Text("Size variability", size=14, weight=ft.FontWeight.W_500)
@@ -489,7 +495,7 @@ class GeneratorScreen(ft.View):
             padding=10
         )
 
-        print(f"DEBUG: Ploto {self.canvas_container.bgcolor}")
+        #print(f"DEBUG: Ploto {self.canvas_container.bgcolor}")
 
         save_btn = ft.Button(
             content=ft.Text("Save all dots and data"),
@@ -758,11 +764,12 @@ class GeneratorScreen(ft.View):
             self.save_png_btn.icon_color = ft.Colors.GREY_900
         self.canvas_container.update()
 
-    def on_back_color_change(self, e: ft.ControlEvent):
-        selected_color = e.data or getattr(e.control, "color", None)
-    
+    def type_back_color_submit(self, e: ft.ControlEvent):
+        selected_color = e.data or getattr(e.control, "value", None)
+
         if selected_color:
             self.color_dropdown.value = "none"
+            self.background_color.color = selected_color
             self.canvas_container.bgcolor = selected_color
             self.prev_btn.icon_color = ft.Colors.GREY_900 
             self.next_btn.icon_color = ft.Colors.GREY_900 
@@ -770,6 +777,8 @@ class GeneratorScreen(ft.View):
             self.delete_btn.icon_color = ft.Colors.GREY_900 
             self.save_png_btn.icon_color = ft.Colors.GREY_900 
 
+            self.background_color.update()
+            self.type_back_color.update()
             self.color_dropdown.update()
             self.canvas_container.update()
             self.prev_btn.update()
@@ -777,7 +786,30 @@ class GeneratorScreen(ft.View):
             self.index_label.update()
             self.delete_btn.update()
             self.save_png_btn.update()
-        print(f"color: {e.data}")
+        #print(f"color: {e.data}")
+
+    def on_back_color_change(self, e: ft.ControlEvent):
+        selected_color = e.data or getattr(e.control, "color", None)
+    
+        if selected_color:
+            self.color_dropdown.value = "none"
+            self.canvas_container.bgcolor = selected_color
+            self.type_back_color.value = selected_color
+            self.prev_btn.icon_color = ft.Colors.GREY_900 
+            self.next_btn.icon_color = ft.Colors.GREY_900 
+            self.index_label.color = ft.Colors.GREY_900 
+            self.delete_btn.icon_color = ft.Colors.GREY_900 
+            self.save_png_btn.icon_color = ft.Colors.GREY_900 
+
+            self.type_back_color.update()
+            self.color_dropdown.update()
+            self.canvas_container.update()
+            self.prev_btn.update()
+            self.next_btn.update()
+            self.index_label.update()
+            self.delete_btn.update()
+            self.save_png_btn.update()
+        #print(f"color: {e.data}")
 
     def on_back_history_change(self, e: ft.ControlEvent):
         if hasattr(e.control, "color_history"):
@@ -785,18 +817,21 @@ class GeneratorScreen(ft.View):
             self.background_color.color_history = new_history
         #print(f"history: {e.data}")
 
-    def on_dot_color_change(self, e: ft.ControlEvent):
-        selected_color = e.data or getattr(e.control, "color", None)
-    
+    def type_dot_color_submit(self, e: ft.ControlEvent):
+        selected_color = e.data or getattr(e.control, "value", None)
+
         if selected_color:
             self.color_dropdown.value = "none"
             self.generator.color = selected_color
+            self.dot_color.color = self.generator.color
             self.prev_btn.icon_color = ft.Colors.GREY_900 
             self.next_btn.icon_color = ft.Colors.GREY_900 
             self.index_label.color = ft.Colors.GREY_900 
             self.delete_btn.icon_color = ft.Colors.GREY_900 
             self.save_png_btn.icon_color = ft.Colors.GREY_900 
 
+            self.dot_color.update()
+            self.type_dot_color.update()
             self.color_dropdown.update()
             self.update_dots_color(self.generator.color)
             self.canvas_container.update()
@@ -805,7 +840,32 @@ class GeneratorScreen(ft.View):
             self.index_label.update()
             self.delete_btn.update()
             self.save_png_btn.update()
-        print(f"color: {e.data}")
+        #print(f"color: {e.data}")
+
+    def on_dot_color_change(self, e: ft.ControlEvent):
+        selected_color = e.data or getattr(e.control, "color", None)
+    
+        if selected_color:
+            self.color_dropdown.value = "none"
+            self.generator.color = selected_color
+            self.type_dot_color.value = selected_color
+            self.prev_btn.icon_color = ft.Colors.GREY_900 
+            self.next_btn.icon_color = ft.Colors.GREY_900 
+            self.index_label.color = ft.Colors.GREY_900 
+            self.delete_btn.icon_color = ft.Colors.GREY_900 
+            self.save_png_btn.icon_color = ft.Colors.GREY_900 
+
+            self.dot_color.update()
+            self.type_dot_color.update()
+            self.color_dropdown.update()
+            self.update_dots_color(self.generator.color)
+            self.canvas_container.update()
+            self.prev_btn.update()
+            self.next_btn.update()
+            self.index_label.update()
+            self.delete_btn.update()
+            self.save_png_btn.update()
+        #print(f"color: {e.data}")
 
     def on_dot_history_change(self, e: ft.ControlEvent):
         if hasattr(e.control, "color_history"):
@@ -890,6 +950,8 @@ class GeneratorScreen(ft.View):
                         "radii": radii,
                         "positions": positions,
                         "metrics": metrics,
+                        "background_color": self.background_color.color,
+                        "dots_color": self.dot_color.color, 
                     }
                 )
 
@@ -903,7 +965,7 @@ class GeneratorScreen(ft.View):
                     if seed_val is not None
                     else " (Random)"
                 )
-                self.info_text.value = f"Success{seed_info}! Generated {len(self.generated_datasets)} items. TSA: {m['TSA']}, CHA: {m['CHA']}, ID: {m['ID']}, TP: {m['TP']}, Density (numerical): {m['Density (numerical)']}, Density (surface): {m['Density (surface)']}, MO: {m['MO']}, Window size: {size_str}"
+                self.info_text.value = f"Success{seed_info}! Generated {len(self.generated_datasets)} items. TSA: {m['TSA']}, CHA: {m['CHA']}, ID: {m['ID']}, TP: {m['TP']}, Density (numerical): {m['Density (numerical)']}, Density (surface): {m['Density (surface)']}, MO: {m['MO']}, Window size: {size_str}, Background color: {self.background_color.color}, Color of dots: {self.dot_color.color}."
             else:
                 self.info_text.value = "Success! Generated 0 items."
             self.update()

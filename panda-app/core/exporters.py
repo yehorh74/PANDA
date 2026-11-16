@@ -26,6 +26,8 @@ def handle_save_config(screen, e):
                 "win_size": screen.window_settings.value,
                 "size_type": screen.size_dropdown.value,
                 "color_scheme": screen.color_dropdown.value,
+                "background_color": screen.background_color.color,
+                "dots_color": screen.dot_color.color,
                 "sd_ratio": screen.sd_slider.value,
                 "min_dist_enabled": screen.min_dist_checkbox.value,
                 "min_dist_value": screen.min_dist_slider.value,
@@ -90,6 +92,11 @@ def handle_load_config(screen, e):
                 screen.color_dropdown.value = config["color_scheme"]
                 screen.handle_color_change(None)
 
+            if "background_color" in config:
+                screen.background_color.color = config["background_color"]
+            if "dots_color" in config:
+                screen.dot_color.color = config["dots_color"]
+
             if "sd_ratio" in config:
                 screen.sd_slider.value = config["sd_ratio"]
                 screen.sd_slider.label = f"SD: {screen.sd_slider.value:.2f}"
@@ -146,6 +153,11 @@ def handle_load_config(screen, e):
                     screen.theme_menu_btn.content.value = "Theme: System"
                     screen.theme_menu_btn.leading = ft.Icon(ft.Icons.BRIGHTNESS_AUTO)
 
+            screen.background_color.update()
+            screen.dot_color.update()
+            screen.type_back_color.value = screen.background_color.color
+            screen.type_dot_color.value = screen.dot_color.color
+
             screen.update()
             screen.info_text.value = f"Configuration loaded successfully from {os.path.basename(file_path)}"
             screen.update()
@@ -188,9 +200,6 @@ def save_current_stimulus_png(screen, folder_path: str):
         bg_color = flet_color_to_rgb(screen.canvas_container.bgcolor)
         dot_color = flet_color_to_rgb(screen.generator.color)
 
-        print(f"DEBUG: Kolor plotna {bg_color}")
-        print(f"DEBUG: Kolor kropek {dot_color}")
-
         spatial_type = screen.spatial_dropdown.value
         size_type = screen.size_dropdown.value
 
@@ -222,7 +231,9 @@ def save_current_stimulus_png(screen, folder_path: str):
             "num_elements": num_elem,
             "spatial_type": spatial_type,
             "size_type": size_type,
-            **metrics
+            **metrics,
+            "background_color": screen.canvas_container.bgcolor,
+            "dots_color": screen.generator.color,
         }
         
         df = pd.DataFrame([row_data])
@@ -298,6 +309,13 @@ def reset_all(screen, e):
     screen.spatial_dropdown.value = "CH"
     screen.size_dropdown.value = "TA"
     screen.color_dropdown.value = "none"
+
+    screen.background_color.color = "#ffffff"
+    screen.dot_color.color = "#000000"
+    screen.type_back_color.value = screen.background_color.color
+    screen.type_dot_color.value = screen.dot_color.color
+    screen.background_color.update()
+    screen.dot_color.update()
     
     screen.canvas_container.bgcolor = ft.Colors.WHITE
     screen.generator.color = ft.Colors.BLACK
