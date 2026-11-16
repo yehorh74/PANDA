@@ -4,4 +4,5 @@ scipy>=1.7.0
 psychopy>=2021.1.0
 pillow>=9.0.0
 flet>=0.20.0
+flet-color-pickers==1.1.2
 panda-generator==0.1.2
