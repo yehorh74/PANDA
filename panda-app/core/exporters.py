@@ -250,7 +250,11 @@ def save_current_stimulus_png(screen, folder_path: str):
 def save_all(screen, folder_path: str):
     try:
         exported_rows = []
-        parts = [int(p.strip()) for p in screen.window_settings.value.split(",")]
+        window_val = getattr(screen.window_settings, "value", None)
+        if not window_val:
+            window_val = "700, 700"  
+            
+        parts = [int(p.strip()) for p in str(window_val).split(",")]
         center_x, center_y = parts[0] / 2 , parts[1] / 2
 
         bg_color = flet_color_to_rgb(screen.canvas_container.bgcolor)
