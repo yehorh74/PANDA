@@ -3,16 +3,17 @@ import traceback
 import os
 
 def global_exception_handler(exc_type, exc_value, exc_traceback):
-    desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
-    report_path = os.path.join(desktop_path, "panda_crash.txt")
+    if getattr(sys, 'frozen', False):
+        app_dir = os.path.dirname(sys.executable)
+    else:
+        app_dir = os.path.dirname(os.path.abspath(__file__))
+        
+    log_path = os.path.join(app_dir, "crash.log")
     
-    error_details = "".join(traceback.format_exception(exc_type, exc_value, exc_traceback))
-    
-    try:
-        with open(report_path, "w", encoding="utf-8") as f:
-            f.write("--- ERROR RAPORT ---\n")
-            f.write(error_details)
-    except Exception:
-        pass
-    
+    with open(log_path, "w", encoding="utf-8") as f:
+        f.write("=== RAPORT KRAXU PANDA ===\n")
+        traceback.print_exception(exc_type, exc_value, exc_traceback, file=f)
+        
     sys.__excepthook__(exc_type, exc_value, exc_traceback)
+
+sys.excepthook = global_exception_handler

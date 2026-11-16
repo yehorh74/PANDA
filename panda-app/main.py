@@ -10,10 +10,6 @@ import flet as ft
 from screens.generator_screen import GeneratorScreen
 from core.debug_log import global_exception_handler
 
-DEBUG = True
-
-if DEBUG:
-    sys.excepthook = global_exception_handler
 class App:
     def __init__(self, page: ft.Page):
         self.page = page
@@ -75,4 +71,8 @@ async def main(page: ft.Page):
     await app.init()
 
 if __name__ == "__main__":
-    ft.run(main)
+    try:
+        ft.run(main)
+    except Exception as e:
+        global_exception_handler(type(e), e, e.__traceback__)
+        raise
