@@ -194,8 +194,15 @@ def save_current_stimulus_png(screen, folder_path: str):
         return
 
     try:
-        parts = [int(p.strip()) for p in screen.window_settings.value.split(",")]
-        center_x, center_y = parts[0] / 2 , parts[1] / 2
+        window_val = getattr(screen.window_settings, "value", None) or "200, 200"
+        parts = [int(p.strip()) for p in str(window_val).split(",")]
+        base_w, base_h = parts[0], parts[1]
+
+        SCALE = 4
+        width = base_w * SCALE
+        height = base_h * SCALE
+        center_x = width / 2
+        center_y = height / 2
 
         bg_color = flet_color_to_rgb(screen.canvas_container.bgcolor)
         dot_color = flet_color_to_rgb(screen.generator.color)
@@ -206,18 +213,21 @@ def save_current_stimulus_png(screen, folder_path: str):
         idx = screen.current_index
         item = screen.generated_datasets[idx]
 
-        image = Image.new("RGB", (parts[0], parts[1]), bg_color)
+        image = Image.new("RGB", (width, height), bg_color)
         draw = ImageDraw.Draw(image)
 
         for pos, r in zip(item["positions"], item["radii"]):
-            x = center_x + pos[0]
-            y = center_y - pos[1]
-            scaled_r = max(2.0, r)
+            x = center_x + (pos[0] * SCALE)
+            y = center_y - (pos[1] * SCALE)
+            scaled_r = max(2.0 * SCALE, r * SCALE)
+            
             draw.ellipse(
                 [x - scaled_r, y - scaled_r, x + scaled_r, y + scaled_r], 
                 fill=dot_color, 
                 outline=dot_color
             )
+
+        image = image.resize((base_w, base_h), Image.Resampling.LANCZOS)
 
         num_elem = item['num']
         base_filename = f"stimulus_{idx + 1}_N{num_elem}_{spatial_type}_{size_type}"
@@ -247,15 +257,22 @@ def save_current_stimulus_png(screen, folder_path: str):
         screen.info_text.value = f"Single Export Error: {str(ex)}"
         screen.update()
 
+
 def save_all(screen, folder_path: str):
     try:
         exported_rows = []
         window_val = getattr(screen.window_settings, "value", None)
         if not window_val:
-            window_val = "700, 700"  
+            window_val = "200, 200"  
             
         parts = [int(p.strip()) for p in str(window_val).split(",")]
-        center_x, center_y = parts[0] / 2 , parts[1] / 2
+        base_w, base_h = parts[0], parts[1]
+
+        SCALE = 4
+        width = base_w * SCALE
+        height = base_h * SCALE
+        center_x = width / 2
+        center_y = height / 2
 
         bg_color = flet_color_to_rgb(screen.canvas_container.bgcolor)
         dot_color = flet_color_to_rgb(screen.generator.color)
@@ -264,18 +281,21 @@ def save_all(screen, folder_path: str):
         size_type = screen.size_dropdown.value
 
         for idx, item in enumerate(screen.generated_datasets):
-            image = Image.new("RGB", (parts[0], parts[1]), bg_color)
+            image = Image.new("RGB", (width, height), bg_color)
             draw = ImageDraw.Draw(image)
 
             for pos, r in zip(item["positions"], item["radii"]):
-                x = center_x + pos[0]
-                y = center_y - pos[1]
-                scaled_r = max(2.0, r)
+                x = center_x + (pos[0] * SCALE)
+                y = center_y - (pos[1] * SCALE)
+                scaled_r = max(2.0 * SCALE, r * SCALE)
+                
                 draw.ellipse(
                     [x - scaled_r, y - scaled_r, x + scaled_r, y + scaled_r], 
                     fill=dot_color, 
                     outline=dot_color
                 )
+
+            image = image.resize((base_w, base_h), Image.Resampling.LANCZOS)
 
             num_elem = item['num']
             filename = f"stimulus_{idx + 1}_N{num_elem}_{spatial_type}_{size_type}.png"
