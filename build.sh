@@ -6,7 +6,12 @@ if command -v asdf &> /dev/null; then
     asdf plugin add python || true
     asdf install python 3.11.9
     asdf local python 3.11.9
+    asdf reshim python
 fi
+
+echo "--- Weryfikacja wersji Pythona ---"
+python --version
+python -m pip --version
 
 echo "--- Pobieranie Flutter SDK (wersja 3.47.9) ---"
 git clone https://github.com/flutter/flutter.git -b 3.47.9 --depth 1 _flutter
