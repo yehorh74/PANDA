@@ -37,7 +37,7 @@ jobs:
           CI: "true"
           FLET_NON_INTERACTIVE: "true"
         run: |
-          flet build web --build-number ${{ github.run_number }} \
+          flet build web -v --build-number ${{ github.run_number }} \
             --base-url / \
             --web-renderer auto \
             -o dist/web
